@@ -10,4 +10,14 @@ class Question extends Model
         'question',
         'event_id',
     ];
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 }

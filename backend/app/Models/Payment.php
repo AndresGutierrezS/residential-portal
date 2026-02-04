@@ -17,4 +17,26 @@ class Payment extends Model
         'is_paid',
         'report_id',
     ];
+
+    public function apartment()
+    {
+        return $this->belongsTo(Apartment::class);
+    }
+
+    public function paymentType()
+    {
+        return $this->belongsTo(PaymentType::class);
+    }
+    public function paymentReason()
+    {
+        return $this->belongsTo(PaymentReason::class);
+    }
+    public function report()
+    {
+        return $this->belongsTo(Report::class);
+    }
+    public function maintenance()
+    {
+        return $this->hasOne(Maintenance::class);
+    }
 }

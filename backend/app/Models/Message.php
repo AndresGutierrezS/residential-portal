@@ -14,4 +14,14 @@ class Message extends Model
         'message',
         'sent_at',
     ];
+
+    public function sender()
+    {
+        return $this->belongsTo(Person::class, 'sender_id');
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(Person::class, 'receiver_id');
+    }
 }

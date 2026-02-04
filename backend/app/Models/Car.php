@@ -13,4 +13,9 @@ class Car extends Model
         'model',
         'color',
     ];
+
+    public function apartment()
+    {
+        return $this->belongsTo(Apartment::class);
+    }
 }
