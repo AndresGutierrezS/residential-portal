@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentType extends Model
 {
     protected $fillable = [
-        'type',
+        'type'
     ];
+
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

@@ -9,4 +9,9 @@ class Role extends Model
     protected $fillable = [
         'role'
     ];
+
+    public function apartmentPerson()
+    {
+        return $this->hasMany(ApartmentPerson::class);
+    }
 }

@@ -9,4 +9,9 @@ class PaymentReason extends Model
     protected $fillable = [
         'reason'
     ];
+
+    public function payment()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }
