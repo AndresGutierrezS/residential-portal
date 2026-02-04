@@ -19,22 +19,22 @@ class Person extends Model
         return $this->hasOne(User::class);
     }
 
-    public function sender()
+    public function senders()
     {
         return $this->hasMany(Message::class, 'sender_id');
     }
 
-    public function receiver()
+    public function receivers()
     {
         return $this->hasMany(Message::class, 'receiver_id');
     }
 
-    public function apartmentPerson()
+    public function apartmentPeople()
     {
         return $this->hasMany(ApartmentPerson::class);
     }
 
-    public function attendance()
+    public function attendances()
     {
         return $this->hasMany(Attendance::class);
     }

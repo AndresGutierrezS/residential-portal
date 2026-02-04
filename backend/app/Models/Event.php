@@ -10,4 +10,14 @@ class Event extends Model
         'event_date',
         'description',
     ];
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
 }

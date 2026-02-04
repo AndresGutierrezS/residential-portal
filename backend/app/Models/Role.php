@@ -10,7 +10,7 @@ class Role extends Model
         'role'
     ];
 
-    public function apartmentPerson()
+    public function apartmentPeople()
     {
         return $this->hasMany(ApartmentPerson::class);
     }

@@ -11,4 +11,24 @@ class Apartment extends Model
         'is_overdue',
         'code'
     ];
+
+    public function apartmentPeople()
+    {
+        return $this->hasMany(ApartmentPerson::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
+    
+    public function cars()
+    {
+        return $this->hasMany(Car::class);
+    }
+
+    public function accessControls()
+    {
+        return $this->hasMany(AccessControl::class);
+    }
 }
