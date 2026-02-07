@@ -2,7 +2,7 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 
-function App() {
+export const PortalGateApp = () => {
   const [count, setCount] = useState(0)
 
   return (
@@ -31,4 +31,3 @@ function App() {
   )
 }
 
-export default App
