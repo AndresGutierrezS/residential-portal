@@ -4,6 +4,7 @@ import  { AdminLayout } from "./admin/layouts/AdminLayout";
 import { ResidentLayout } from "./resident/layouts/ResidentLayout";
 import { HomePage } from "./resident/pages/HomePage";
 import { ChatPage } from "./resident/pages/ChatPage";
+import { LoginPage } from "./auth/pages/LoginPage";
 
 
 export const appRouter = createBrowserRouter([
@@ -28,7 +29,7 @@ export const appRouter = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: 'login'
+                element: <LoginPage />
             }
         ]
       },
