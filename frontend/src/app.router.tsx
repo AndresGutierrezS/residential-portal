@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
-import { ResidentLayout } from "./resident/layouts/ResidentLayout";
 import { AuthLayout } from './auth/layouts/AuthLayout';
 import  { AdminLayout } from "./admin/layouts/AdminLayout";
+import { ResidentLayout } from "./resident/layouts/ResidentLayout";
 import { HomePage } from "./resident/pages/HomePage";
 import { ChatPage } from "./resident/pages/ChatPage";
 
