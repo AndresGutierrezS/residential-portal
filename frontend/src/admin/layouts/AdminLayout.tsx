@@ -44,15 +44,15 @@ export const AdminLayout = () => {
   };
 
   const adminMenuItems = [
-    { path: "/", label: "Inicio", icon: Home },
-    { path: "/residents", label: "Residentes", icon: Users },
-    { path: "/units", label: "Unidades", icon: Building },
-    { path: "/payments", label: "Pagos", icon: CreditCard },
-    { path: "/vehicles", label: "Vehículos", icon: Car },
-    { path: "/expenses", label: "Gastos", icon: TrendingDown },
-    { path: "/events", label: "Eventos", icon: Calendar },
-    { path: "/reports", label: "Reportes", icon: FileText },
-    { path: "/chat", label: "Chat", icon: MessageSquare },
+    { path: "/admin", label: "Inicio", icon: Home },
+    { path: "/admin/residents", label: "Residentes", icon: Users },
+    { path: "/admin/units", label: "Unidades", icon: Building },
+    { path: "/admin/payments", label: "Pagos", icon: CreditCard },
+    { path: "/admin/cars", label: "Vehículos", icon: Car },
+    { path: "/admin/expenses", label: "Gastos", icon: TrendingDown },
+    { path: "/admin/events", label: "Eventos", icon: Calendar },
+    { path: "/admin/reports", label: "Reportes", icon: FileText },
+    { path: "/admin/chat", label: "Chat", icon: MessageSquare },
   ];
 
 

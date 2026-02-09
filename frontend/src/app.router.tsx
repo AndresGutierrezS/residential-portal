@@ -5,6 +5,15 @@ import { ResidentLayout } from "./resident/layouts/ResidentLayout";
 import { HomePage } from "./resident/pages/HomePage";
 import { ChatPage } from "./resident/pages/ChatPage";
 import { LoginPage } from "./auth/pages/LoginPage";
+import { DashboardPage } from "./admin/pages/DashboardPage";
+import { ResidentsPage } from "./admin/pages/ResidentsPage";
+import { UnitsPage } from "./admin/pages/UnitsPage";
+import { PaymentsPage } from "./admin/pages/PaymentsPage";
+import { CarsPage } from "./admin/pages/CarsPage";
+import { ExpensesPage } from "./admin/pages/ExpensesPage";
+import { EventsPage } from "./admin/pages/EventsPage";
+import { ReportsPage } from "./admin/pages/ReportsPage";
+import { AdminChatPage } from "./admin/pages/AdminChatPage";
 
 
 export const appRouter = createBrowserRouter([
@@ -40,39 +49,39 @@ export const appRouter = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: 'dashboard'
+                element: <DashboardPage />
             },
             {
                 path: 'residents',
-                element: 'residents'
+                element: <ResidentsPage />
             },
             {
                 path: 'units',
-                element: 'units'
+                element: <UnitsPage />
             },
             {
                 path: 'payments',
-                element: 'payments'
+                element: <PaymentsPage />
             },
             {
                 path: 'cars',
-                element: 'cars'
+                element: <CarsPage />
             },
             {
                 path: 'expenses',
-                element: 'expenses'
+                element: <ExpensesPage />
             },
             {
                 path: 'events',
-                element: 'events'
+                element: <EventsPage />
             },
             {
                 path: 'reports',
-                element: 'reports'
+                element: <ReportsPage />
             },
             {
                 path: 'chat',
-                element: 'chat'
+                element: <AdminChatPage />
             },
         ],
       }
