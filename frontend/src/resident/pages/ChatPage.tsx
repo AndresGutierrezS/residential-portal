@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import echo from '@/lib/echo';
 
 interface Message {
   id: string;
@@ -38,6 +39,29 @@ export const ChatPage = () => {
   const [newMessage, setNewMessage] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const currentUser = localStorage.getItem("currentUser") || "Usuario";
+
+  useEffect(() => {
+
+  echo.channel("chat")
+    .listen(".message.sent", (e: any) => {
+
+      const message: Message = {
+        id: Date.now().toString(),
+        user: "Usuario " + e.userId,
+        message: e.message,
+        timestamp: new Date(),
+      };
+      console.log({message});
+
+      // setMessages(prev => [...prev, message]);
+
+    });
+
+    return () => {
+      echo.leave("chat");
+    };
+
+  }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
