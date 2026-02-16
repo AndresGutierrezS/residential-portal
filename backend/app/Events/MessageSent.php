@@ -38,7 +38,7 @@ class MessageSent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('messages'),
+            new Channel('chat'),
         ];
     }
 }
