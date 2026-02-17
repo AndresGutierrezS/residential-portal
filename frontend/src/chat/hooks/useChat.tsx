@@ -5,11 +5,12 @@ import echo from "@/lib/echo";
 import { sendMessageAction } from "../actions/sendMessage.action";
 
 
-export const useChat = async () => {
+export const useChat = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        setIsLoading(true)
         loadMessages();
         connectSocket();
 

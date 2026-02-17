@@ -18,11 +18,9 @@ class MessageSent implements ShouldBroadcastNow
     /**
      * Create a new event instance.
      */
-    public function __construct(
-        public Message $message
-    )
+    public function __construct(public Message $message)
     {
-        //
+        $this->message->load('sender');
     }
 
     public function broadcastAs(): string

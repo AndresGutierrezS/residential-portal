@@ -40,6 +40,8 @@ class ChatController extends Controller
             'sent_at' => now(),
         ]);
 
+        $message->load('sender');
+
         broadcast(new MessageSent($message))->toOthers();
         return response()->json($message);
     }

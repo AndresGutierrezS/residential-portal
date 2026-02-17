@@ -5,63 +5,66 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import echo from '@/lib/echo';
+// import echo from '@/lib/echo';
+import { useChat } from "@/chat/hooks/useChat";
 
-interface Message {
-  id: string;
-  user: string;
-  message: string;
-  timestamp: Date;
-}
+// interface Message {
+//   id: string;
+//   user: string;
+//   message: string;
+//   timestamp: Date;
+// }
 
 export const ChatPage = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "1",
-      user: "Administración",
-      message: "Recordatorio: Mañana habrá mantenimiento del elevador de 9am a 12pm",
-      timestamp: new Date(Date.now() - 3600000),
-    },
-    {
-      id: "2",
-      user: "Juan Pérez",
-      message: "¿A qué hora es la reunión de copropietarios?",
-      timestamp: new Date(Date.now() - 1800000),
-    },
-    {
-      id: "3",
-      user: "María González",
-      message: "La reunión es el viernes a las 6pm en el salón comunal",
-      timestamp: new Date(Date.now() - 900000),
-    },
-  ]);
+  const {messages, isLoading, sendMessage} = useChat();
+  
+  // const [messages, setMessages] = useState<Message[]>([
+  //   {
+  //     id: "1",
+  //     user: "Administración",
+  //     message: "Recordatorio: Mañana habrá mantenimiento del elevador de 9am a 12pm",
+  //     timestamp: new Date(Date.now() - 3600000),
+  //   },
+  //   {
+  //     id: "2",
+  //     user: "Juan Pérez",
+  //     message: "¿A qué hora es la reunión de copropietarios?",
+  //     timestamp: new Date(Date.now() - 1800000),
+  //   },
+  //   {
+  //     id: "3",
+  //     user: "María González",
+  //     message: "La reunión es el viernes a las 6pm en el salón comunal",
+  //     timestamp: new Date(Date.now() - 900000),
+  //   },
+  // ]);
 
   const [newMessage, setNewMessage] = useState("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const currentUser = localStorage.getItem("currentUser") || "Usuario";
 
-  useEffect(() => {
+  // useEffect(() => {
 
-  echo.channel("chat")
-    .listen(".message.sent", (e: any) => {
+  // echo.channel("chat")
+  //   .listen(".message.sent", (e: any) => {
 
-      const message: Message = {
-        id: Date.now().toString(),
-        user: "Usuario " + e.senderId,
-        message: e.message,
-        timestamp: new Date(),
-      };
-      console.log({message});
+  //     const message: Message = {
+  //       id: Date.now().toString(),
+  //       user: "Usuario " + e.senderId,
+  //       message: e.message,
+  //       timestamp: new Date(),
+  //     };
+  //     console.log({message});
 
-      // setMessages(prev => [...prev, message]);
+  //     // setMessages(prev => [...prev, message]);
 
-    });
+  //   });
 
-    return () => {
-      echo.leave("chat");
-    };
+  //   return () => {
+  //     echo.leave("chat");
+  //   };
 
-  }, []);
+  // }, []);
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -69,23 +72,23 @@ export const ChatPage = () => {
     }
   }, [messages]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
-    const message: Message = {
-      id: Date.now().toString(),
-      user: currentUser,
-      message: newMessage,
-      timestamp: new Date(),
-    };
+    // const message: Message = {
+    //   id: Date.now().toString(),
+    //   user: currentUser,
+    //   message: newMessage,
+    //   timestamp: new Date(),
+    // };
 
-    setMessages([...messages, message]);
+    await sendMessage(newMessage);
     setNewMessage("");
   };
 
   const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("es-ES", {
+    return new Date(date).toLocaleTimeString("es-ES", {
       hour: "2-digit",
       minute: "2-digit",
     });
@@ -121,7 +124,7 @@ export const ChatPage = () => {
           <ScrollArea className="flex-1 pr-4" ref={scrollRef}>
             <div className="space-y-4">
               {messages.map((msg) => {
-                const isCurrentUser = msg.user === currentUser;
+                const isCurrentUser = msg.sender_id === Number(localStorage.getItem("userId"));
                 return (
                   <div
                     key={msg.id}
@@ -130,7 +133,7 @@ export const ChatPage = () => {
                     }`}
                   >
                     <Avatar>
-                      <AvatarFallback>{getInitials(msg.user)}</AvatarFallback>
+                      <AvatarFallback>{getInitials(msg.sender?.name)}</AvatarFallback>
                     </Avatar>
                     <div
                       className={`flex flex-col ${
@@ -139,10 +142,10 @@ export const ChatPage = () => {
                     >
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm font-medium text-gray-900">
-                          {msg.user}
+                          {msg.sender?.name}
                         </span>
                         <span className="text-xs text-gray-500">
-                          {formatTime(msg.timestamp)}
+                          {formatTime(msg.sent_at)}
                         </span>
                       </div>
                       <div
