@@ -47,7 +47,7 @@ export const ChatPage = () => {
 
       const message: Message = {
         id: Date.now().toString(),
-        user: "Usuario " + e.userId,
+        user: "Usuario " + e.senderId,
         message: e.message,
         timestamp: new Date(),
       };

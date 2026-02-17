@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Events\MessageSent;
+use App\Http\Controllers\ChatController;
 use Illuminate\Http\Request;
 
 Route::post('/messages', function (Request $request) {
@@ -12,5 +13,8 @@ Route::post('/messages', function (Request $request) {
 
     return response()->json(['status' => 'sent']);
 });
+
+Route::get('chat/messages', [ChatController::class, 'index']);
+Route::post('chat/messages', [ChatController::class, 'store']);
 
 
