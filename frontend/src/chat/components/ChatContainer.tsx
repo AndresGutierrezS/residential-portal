@@ -6,19 +6,24 @@ import { MessageList } from "./MessageList"
 export const ChatContainer = () => {
   
     const {isLoading, messages, sendMessage} = useChat();
+    const currentUserId = localStorage.getItem("currentUser") || "Usuario";
+
 
     return (
         <>
-            <Card className="h-[calc(100vh-16rem)]">
+            <Card className="h-[calc(100vh-16rem)] flex flex-col">
                 <CardHeader>
                 <CardTitle>Anuncios y Mensajes</CardTitle>
                 <CardDescription>
                     Todos los residentes pueden ver y enviar mensajes
                 </CardDescription>
                 </CardHeader>
-                <CardContent className="h-[calc(100%-5rem)] flex flex-col">
-                    <MessageList messages={messages}/>
-                    <MessageInput sendMessage={sendMessage}/>
+                <CardContent className="flex flex-col h-full overflow-hidden min-h-0">
+                    <MessageList 
+                        messages={messages} 
+                        currentUserId={currentUserId}
+                    />
+                    <MessageInput onSendMessage={sendMessage}/>
                 </CardContent>
             </Card>
         </>

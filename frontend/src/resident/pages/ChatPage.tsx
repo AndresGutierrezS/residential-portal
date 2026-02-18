@@ -3,9 +3,6 @@ import { ChatContainer } from "@/chat/components/ChatContainer";
 
 export const ChatPage = () => {
 
-  const currentUser = localStorage.getItem("currentUser") || "Usuario";
-
-
   return (
     <div className="space-y-6">
       <div>

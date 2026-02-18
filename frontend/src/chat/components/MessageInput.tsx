@@ -4,10 +4,10 @@ import { Send } from "lucide-react"
 import { useState } from "react";
 
 interface Props {
-    sendMessage: (message: string) => Promise<void>,
+    onSendMessage: (message: string) => Promise<void>,
 }
 
-export const MessageInput = ({sendMessage}: Props) => {
+export const MessageInput = ({onSendMessage: sendMessage}: Props) => {
     const [newMessage, setNewMessage] = useState("");
 
     const handleSendMessage = async (e: React.FormEvent) => {

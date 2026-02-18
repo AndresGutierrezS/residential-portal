@@ -47,13 +47,13 @@ export const MessageItem = ({msg, isCurrentUser}: Props) => {
                 </span>
                 </div>
                 <div
-                className={`px-4 py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg max-w-full wrap-break-word whitespace-pre-wrap ${
                     isCurrentUser
                     ? "bg-blue-600 text-white"
                     : "bg-gray-100 text-gray-900"
                 }`}
                 >
-                <p className="text-sm">{msg.message}</p>
+                <p className="text-sm wrap-break-word whitespace-pre-wrap">{msg.message}</p>
                 </div>
             </div>
         </div>
