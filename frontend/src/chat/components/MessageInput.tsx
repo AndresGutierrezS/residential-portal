@@ -27,7 +27,7 @@ export const MessageInput = ({onSendMessage: sendMessage}: Props) => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 className="flex-1"
                 />
-                <Button type="submit" disabled={!newMessage.trim()}>
+                <Button type="submit" disabled={!newMessage.trim()} className="cursor-pointer">
                 <Send className="h-4 w-4 mr-2" />
                 Enviar
                 </Button>
