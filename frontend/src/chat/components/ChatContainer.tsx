@@ -6,7 +6,7 @@ import { MessageList } from "./MessageList"
 export const ChatContainer = () => {
   
     const {isLoading, messages, sendMessage} = useChat();
-    const currentUserId = localStorage.getItem("currentUser") || "Usuario";
+    const currentUserId = Number(localStorage.getItem("userId"));
 
 
     return (
@@ -22,6 +22,7 @@ export const ChatContainer = () => {
                     <MessageList 
                         messages={messages} 
                         currentUserId={currentUserId}
+                        isLoading={isLoading}
                     />
                     <MessageInput onSendMessage={sendMessage}/>
                 </CardContent>

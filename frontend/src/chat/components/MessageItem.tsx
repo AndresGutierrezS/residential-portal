@@ -15,7 +15,9 @@ export const MessageItem = ({msg, isCurrentUser}: Props) => {
         });
     };
 
-    const getInitials = (name: string) => {
+    const getInitials = (name?: string) => {
+        if (!name) return "?";
+
         return name
         .split(" ")
         .map((n) => n[0])

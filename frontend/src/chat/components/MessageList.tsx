@@ -5,10 +5,11 @@ import { MessageItem } from "./MessageItem";
 
 interface Props {
     messages: Message[],
-    currentUserId: string,
+    currentUserId: number,
+    isLoading: boolean,
 }
 
-export const MessageList = ({messages, currentUserId}: Props) => {
+export const MessageList = ({messages, currentUserId, isLoading}: Props) => {
   
     const scrollRef = useRef<HTMLDivElement>(null);
     
@@ -18,11 +19,21 @@ export const MessageList = ({messages, currentUserId}: Props) => {
         }
     }, [messages]);
 
+    if (isLoading) {
+        return (
+            <div className="flex-1 flex items-center justify-center">
+                <span className="text-gray-500 text-sm">
+                    Cargando mensajes...
+                </span>
+            </div>
+        );
+    }
+
     return (
         <ScrollArea className="flex-1 pr-4 overflow-y-auto">
             <div ref={scrollRef} className="space-y-4 min-h-0">
                 {messages.map((msg) => {
-                const isCurrentUser = msg.sender_id === Number(localStorage.getItem("userId"));
+                const isCurrentUser = msg.sender_id === currentUserId;
                 return (
                     <MessageItem key={msg.id} isCurrentUser={isCurrentUser} msg={msg}/>
                 );
