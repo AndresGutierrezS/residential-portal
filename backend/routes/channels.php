@@ -10,6 +10,6 @@ Broadcast::channel('chat', function () {
     return true;
 });
 
-Broadcast::channel('notifications.${user_id}', function($user, $userId) {
-    return $user->id === $userId;
+Broadcast::channel('notifications.{user_id}', function() {
+    return true;
 });

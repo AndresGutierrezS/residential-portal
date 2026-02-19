@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { NotificationBell } from "@/notifications/components/NotificationBell";
 
 export const ResidentLayout = () => {
   const navigate = useNavigate();
@@ -87,21 +88,7 @@ export const ResidentLayout = () => {
 
             {/* Right side */}
             <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="relative"
-              >
-                <Bell className="h-5 w-5" />
-                {notifications > 0 && (
-                  <Badge
-                    variant="destructive"
-                    className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                  >
-                    {notifications}
-                  </Badge>
-                )}
-              </Button>
+              <NotificationBell />
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
                 <User className="h-4 w-4 text-gray-600" />
                 <span className="text-sm font-medium text-gray-900">{currentUser.split('@')[0]}</span>

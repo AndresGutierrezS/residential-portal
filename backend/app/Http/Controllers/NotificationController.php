@@ -11,9 +11,11 @@ class NotificationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($userId)
     {
-        //
+        return Notification::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 
     /**
