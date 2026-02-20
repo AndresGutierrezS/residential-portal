@@ -19,5 +19,7 @@ Route::get('chat/messages', [ChatController::class, 'index']);
 Route::post('chat/messages', [ChatController::class, 'store']);
 
 Route::get('notifications/{userId}', [NotificationController::class, 'index']);
+Route::post('notifications/{userId}', [NotificationController::class, 'store']);
+Route::patch('notifications/{userId}/read-all', [NotificationController::class, 'markAllAsRead']);
 
 

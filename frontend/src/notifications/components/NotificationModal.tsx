@@ -1,3 +1,4 @@
+import { Link } from "react-router"
 import type { Notification } from "../interfaces/notification.interface"
 
 interface Props {
@@ -18,16 +19,17 @@ export const NotificationModal = ({notifications}: Props) => {
 
                 <div
                     key={notification.id}
-                    className="p-4 border-b hover:bg-gray-50 cursor-pointer"
+                    className={`p-4 border-b hover:bg-gray-50 cursor-pointer ${!notification.read_at ? "bg-gray-100 font-semibold" : ""}`}
                 >
-                    <div className="font-semibold">
-                        {notification.title}
-                    </div>
+                    <Link to={`${notification.url}`}>
+                        <div className="font-semibold">
+                            {notification.title}
+                        </div>
 
-                    <div className="text-sm text-gray-600">
-                        {notification.message}
-                    </div>
-
+                        <div className="text-sm text-gray-600">
+                            {notification.message}
+                        </div>
+                    </Link>
                 </div>
 
             ))}

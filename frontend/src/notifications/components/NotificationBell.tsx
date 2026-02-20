@@ -7,9 +7,14 @@ import { NotificationModal } from "./NotificationModal";
 
 export const NotificationBell = () => {
     
-    const {unreadCount, notifications} = useNotifications();
+    const {unreadCount, notifications, markAllAsRead, reload} = useNotifications();
     const [isOpen, setIsOpen] = useState(false);
 
+    const handleClick = () => {
+        setIsOpen(!isOpen);
+        
+        markAllAsRead();
+    }
 
     return (
         <div>
@@ -17,7 +22,7 @@ export const NotificationBell = () => {
                 variant="ghost"
                 size="icon"
                 className="relative cursor-pointer"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={() => handleClick()}
                 >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (

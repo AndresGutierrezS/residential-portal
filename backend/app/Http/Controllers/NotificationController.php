@@ -31,7 +31,7 @@ class NotificationController extends Controller
             'url' => '/fines/123'
         ]);
 
-        broadcast(new NotificationCreated($notification))->toOthers();
+        broadcast(new NotificationCreated($notification));
 
         return response()->json($notification);
     }
@@ -39,9 +39,15 @@ class NotificationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($userId)
     {
-        //
+        // Notification::where('user_id', $userId)
+        //     ->whereNull('read_at')
+        //     ->update([
+        //         'read_at' => now()
+        //     ]);
+
+        // return response()->json(['success', true]);
     }
 
     /**
@@ -58,5 +64,18 @@ class NotificationController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function markAllAsRead($userId)
+    {
+        Notification::where('user_id', $userId)
+            ->whereNull('read_at')
+            ->update([
+                'read_at' => now()
+            ]);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

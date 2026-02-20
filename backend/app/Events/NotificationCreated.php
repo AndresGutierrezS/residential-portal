@@ -37,6 +37,6 @@ class NotificationCreated implements ShouldBroadcastNow
 
     public function broadcastAs()
     {
-        return 'Notification.created';
+        return 'notification.created';
     }
 }
