@@ -31,7 +31,7 @@ class NotificationCreated implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('notifications.' . $this->notification->user_id),
+            new Channel('notifications.' . $this->notification->user_id),
         ];
     }
 
@@ -39,4 +39,11 @@ class NotificationCreated implements ShouldBroadcastNow
     {
         return 'notification.created';
     }
+
+    public function broadcastWith()
+{
+    return [
+        'notification' => $this->notification
+    ];
+}
 }

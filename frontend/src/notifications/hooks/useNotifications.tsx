@@ -14,8 +14,11 @@ export const useNotifications = () => {
     useEffect(() => {
         if(!userId) return;
 
-        const channel = echo.private(`notifications.${userId}`)
+        console.log("Connecting to notifications channel:", userId);
+
+        const channel = echo.channel(`notifications.${userId}`)
             .listen(".notification.created", (e: any) => {
+                // console.log("Notification received:", e);
                 const notification = e.notification;
                 setNotifications(prev => [notification, ...prev]);
                 setUnreadCount(prev => prev + 1);

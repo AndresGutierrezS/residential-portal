@@ -6,14 +6,14 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
 
-Route::post('/messages', function (Request $request) {
-    event(new MessageSent(
-        $request->message,
-        1 
-    ));
+// Route::post('/messages', function (Request $request) {
+//     event(new MessageSent(
+//         $request->message,
+//         1 
+//     ));
 
-    return response()->json(['status' => 'sent']);
-});
+//     return response()->json(['status' => 'sent']);
+// });
 
 Route::get('chat/messages', [ChatController::class, 'index']);
 Route::post('chat/messages', [ChatController::class, 'store']);
