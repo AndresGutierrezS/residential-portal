@@ -19,12 +19,14 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ADMIN_ROUTES } from "../routes";
+import { NotificationBell } from "@/notifications/components/NotificationBell";
 
 export const AdminLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [notifications, setNotifications] = useState(3);
+  // const [notifications, setNotifications] = useState(3);
   const userRole = localStorage.getItem("userRole") || "user";
   const currentUser = localStorage.getItem("currentUser") || "Usuario";
 
@@ -44,15 +46,15 @@ export const AdminLayout = () => {
   };
 
   const adminMenuItems = [
-    { path: "/admin", label: "Inicio", icon: Home },
-    { path: "/admin/residents", label: "Residentes", icon: Users },
-    { path: "/admin/units", label: "Unidades", icon: Building },
-    { path: "/admin/payments", label: "Pagos", icon: CreditCard },
-    { path: "/admin/cars", label: "Vehículos", icon: Car },
-    { path: "/admin/expenses", label: "Gastos", icon: TrendingDown },
-    { path: "/admin/events", label: "Eventos", icon: Calendar },
-    { path: "/admin/reports", label: "Reportes", icon: FileText },
-    { path: "/admin/chat", label: "Chat", icon: MessageSquare },
+    { path: ADMIN_ROUTES.DASHBOARD, label: "Inicio", icon: Home },
+    { path: ADMIN_ROUTES.RESIDENTS, label: "Residentes", icon: Users },
+    { path: ADMIN_ROUTES.UNITS, label: "Unidades", icon: Building },
+    { path: ADMIN_ROUTES.PAYMENTS, label: "Pagos", icon: CreditCard },
+    { path: ADMIN_ROUTES.CARS, label: "Vehículos", icon: Car },
+    { path: ADMIN_ROUTES.EXPENSES, label: "Gastos", icon: TrendingDown },
+    { path: ADMIN_ROUTES.EVENTS, label: "Eventos", icon: Calendar },
+    { path: ADMIN_ROUTES.REPORTS, label: "Reportes", icon: FileText },
+    { path: ADMIN_ROUTES.CHAT, label: "Chat", icon: MessageSquare },
   ];
 
 
@@ -87,21 +89,7 @@ export const AdminLayout = () => {
 
               {/* Right side */}
               <div className="flex items-center gap-4">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative"
-                >
-                  <Bell className="h-5 w-5" />
-                  {notifications > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs"
-                    >
-                      {notifications}
-                    </Badge>
-                  )}
-                </Button>
+                <NotificationBell />
                 <Button
                   variant="ghost"
                   size="icon"

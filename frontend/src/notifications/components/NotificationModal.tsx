@@ -9,30 +9,32 @@ export const NotificationModal = ({notifications}: Props) => {
     return (
         <div className="absolute right-0 mt-2 w-80 bg-white shadow-lg rounded-lg border z-50">
 
-            {notifications.length === 0 && (
-                <div className="p-4 text-gray-500">
-                    No hay notificaciones
-                </div>
-            )}
+            <div className="max-h-96 overflow-y-auto">
+                {notifications.length === 0 && (
+                    <div className="p-4 text-gray-500">
+                        No hay notificaciones
+                    </div>
+                )}
 
-            {notifications.map(notification => (
+                {notifications.map(notification => (
 
-                <div
-                    key={notification.id}
-                    className={`p-4 border-b hover:bg-gray-50 cursor-pointer ${!notification.read_at ? "bg-gray-100 font-semibold" : ""}`}
-                >
-                    <Link to={`${notification.url}`}>
-                        <div className="font-semibold">
-                            {notification.title}
-                        </div>
+                    <div
+                        key={notification.id}
+                        className={`p-4 border-b hover:bg-gray-50 cursor-pointer ${!notification.read_at ? "bg-gray-100 font-semibold" : ""}`}
+                    >
+                        <Link to={`${notification.url}`}>
+                            <div className="font-semibold">
+                                {notification.title}
+                            </div>
 
-                        <div className="text-sm text-gray-600">
-                            {notification.message}
-                        </div>
-                    </Link>
-                </div>
+                            <div className="text-sm text-gray-600">
+                                {notification.message}
+                            </div>
+                        </Link>
+                    </div>
 
-            ))}
+                ))}
+            </div>
 
         </div>
     )
