@@ -31,4 +31,16 @@ class Apartment extends Model
     {
         return $this->hasMany(AccessControl::class);
     }
+
+    public function people()
+    {
+        return $this->belongsToMany(Person::class)
+            ->using(ApartmentPerson::class)
+            ->withPivot([
+                'role_id',
+                'is_resident',
+                'code'
+            ])
+            ->withTimestamps();
+    }
 }

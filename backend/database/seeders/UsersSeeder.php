@@ -16,6 +16,7 @@ class UsersSeeder extends Seeder
         foreach ($peopleIds as $personId) {
             DB::table('users')->insert([
                 'person_id' => $personId,
+                'email' => fake()->email(),
                 'password' => Hash::make('123'), 
                 'remember_token' => Str::random(10),
                 'is_admin' => fake()->boolean(30), 

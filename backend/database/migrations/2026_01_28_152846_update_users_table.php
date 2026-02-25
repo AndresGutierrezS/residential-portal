@@ -16,8 +16,7 @@ return new class extends Migration
             $table->boolean('is_admin');
 
             $table->dropColumn('name');
-            $table->dropColumn('email');
-            $table->dropColumn('email_verified_at');
+
         });
     }
 
@@ -28,8 +27,6 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
 
             $table->dropForeign(['person_id']);
             $table->dropColumn('person_id');

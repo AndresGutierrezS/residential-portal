@@ -41,6 +41,7 @@ class Person extends Model
 
     public function apartments() {
         return $this->belongsToMany(Apartment::class, 'apartment_person')
+            ->using(ApartmentPerson::class)
             ->withPivot(['role_id', 'is_resident', 'code'])
             ->withTimestamps();
     }
