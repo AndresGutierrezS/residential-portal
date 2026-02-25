@@ -38,4 +38,10 @@ class Person extends Model
     {
         return $this->hasMany(Attendance::class);
     }
+
+    public function apartments() {
+        return $this->belongsToMany(Apartment::class, 'apartment_person')
+            ->withPivot(['role_id', 'is_resident', 'code'])
+            ->withTimestamps();
+    }
 }
