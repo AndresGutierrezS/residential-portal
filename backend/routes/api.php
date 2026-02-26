@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Events\MessageSent;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\NotificationController;
@@ -32,6 +31,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('notifications/{userId}', [NotificationController::class, 'store']);
     Route::patch('notifications/{userId}/read-all', [NotificationController::class, 'markAllAsRead']);
 
+});
+
+Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
+    return $request->user()->load(
+        'person.apartments',
+        'person.apartmentPeople.role'
+    );
 });
 
 
