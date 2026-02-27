@@ -1,7 +1,8 @@
 import { portalGateApi } from "@/api/portalGateApi";
+import type { AuthResponse } from "../interfaces/auth.response";
 
 
-export const checkAuthAction = async () => {
+export const checkAuthAction = async (): Promise<AuthResponse> => {
 
     try {
         const token = localStorage.getItem('token');
@@ -12,6 +13,7 @@ export const checkAuthAction = async () => {
             token
         }
     } catch (error) {
+        console.log(error);
         throw error;
     }
 }

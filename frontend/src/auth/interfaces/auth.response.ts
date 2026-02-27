@@ -1,5 +1,6 @@
+import type { User } from "@/interfaces/user.interface";
 
 export interface AuthResponse {
-    user: {},
+    user: User,
     token: string
 }
