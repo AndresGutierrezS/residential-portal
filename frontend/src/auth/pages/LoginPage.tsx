@@ -5,37 +5,36 @@ import { SelectTrigger, SelectValue, SelectContent, SelectItem, Select } from "@
 import { useState } from "react"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
+import { useAuthStore } from "../store/auth.store"
 
 export const LoginPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  
+  const login = useAuthStore(state => state.login);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<"admin" | "user">("user");
   const [isLoading, setIsLoading] = useState(false);
+  //const [role, setRole] = useState<"admin" | "user">("user");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login
-    setTimeout(() => {
-      if (email && password) {
-        localStorage.setItem("isAuthenticated", "true");
-        localStorage.setItem("currentUser", email);
-        localStorage.setItem("userRole", role);
-        localStorage.setItem("userUnit", "305"); // Simulate user's unit
-        toast.success("Inicio de sesión exitoso");
-        navigate("/");
-      } else {
-        toast.error("Por favor ingrese email y contraseña");
-      }
-      setIsLoading(false);
-    }, 1000);
+    const success = await login(email, password);
+
+    if (success) {
+      toast.success("Inicio de sesión exitoso");
+      navigate("/");
+    } else {
+      toast.error("Por favor ingrese email y contraseña");
+    }
+    setIsLoading(false);
   };
 
   return (
     <form onSubmit={handleLogin} className="space-y-4">
-        <div className="space-y-2">
+        {/* <div className="space-y-2">
             <Label htmlFor="role">Tipo de Usuario</Label>
             <Select value={role} onValueChange={(value: "admin" | "user") => setRole(value)}>
             <SelectTrigger>
@@ -46,13 +45,13 @@ export const LoginPage = () => {
                 <SelectItem value="user">Residente</SelectItem>
             </SelectContent>
             </Select>
-        </div>
+        </div> */}
         <div className="space-y-2">
             <Label htmlFor="email">Correo Electrónico</Label>
             <Input
             id="email"
             type="email"
-            placeholder={role === "admin" ? "admin@condominio.com" : "residente@email.com"}
+            placeholder={"residente@email.com"}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required

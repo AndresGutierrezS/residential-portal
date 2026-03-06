@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { NotificationBell } from "@/notifications/components/NotificationBell";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 export const ResidentLayout = () => {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ export const ResidentLayout = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [notifications, setNotifications] = useState(3);
   const userRole = localStorage.getItem("userRole") || "user";
-  const currentUser = localStorage.getItem("currentUser") || "Usuario";
-
+  //const currentUser = localStorage.getItem("currentUser") || "Usuario";
+  const {logout, user} = useAuthStore();
   // useEffect(() => {
   //   const isAuthenticated = localStorage.getItem("isAuthenticated");
   //   if (!isAuthenticated) {
@@ -27,12 +28,9 @@ export const ResidentLayout = () => {
   //   }
   // }, [navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("currentUser");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userUnit");
-    navigate("/login");
+  const handleLogout = async() => {
+    await logout();
+    navigate("/auth");
   };
 
 
@@ -91,12 +89,12 @@ export const ResidentLayout = () => {
               <NotificationBell />
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
                 <User className="h-4 w-4 text-gray-600" />
-                <span className="text-sm font-medium text-gray-900">{currentUser.split('@')[0]}</span>
+                <span className="text-sm font-medium text-gray-900">{user?.person.name}</span>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={handleLogout}
+                onClick={() => handleLogout()}
                 title="Cerrar sesión"
               >
                 <LogOut className="h-5 w-5" />

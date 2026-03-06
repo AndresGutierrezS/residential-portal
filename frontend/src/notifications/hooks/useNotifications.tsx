@@ -9,7 +9,7 @@ export const useNotifications = () => {
 
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [unreadCount, setUnreadCount] = useState(0);
-    const userId = Number(localStorage.getItem('userId') ?? 1);
+    const userId = Number(localStorage.getItem('userId'));
 
     useEffect(() => {
         if(!userId) return;

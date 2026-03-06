@@ -1,3 +1,4 @@
+import { useAuthStore } from "@/auth/store/auth.store";
 import { Button } from "@/components/ui/button";
 import { NotificationBell } from "@/notifications/components/NotificationBell";
 import { X, Menu, LogOut } from "lucide-react";
@@ -10,13 +11,11 @@ interface Props {
 
 export const AdminHeader = ({setIsMobileMenuOpen, isMobileMenuOpen}: Props) => {
     const navigate = useNavigate();
-    
-    const handleLogout = () => {
-        localStorage.removeItem("isAuthenticated");
-        localStorage.removeItem("currentUser");
-        localStorage.removeItem("userRole");
-        localStorage.removeItem("userUnit");
-        navigate("/login");
+    const logout = useAuthStore(state => state.logout);
+
+    const handleLogout = async () => {
+        await logout();
+        navigate("/auth");
     };
 
     return(
@@ -41,7 +40,7 @@ export const AdminHeader = ({setIsMobileMenuOpen, isMobileMenuOpen}: Props) => {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={handleLogout}
+                  onClick={() => handleLogout()}
                   title="Cerrar sesión"
                 >
                   <LogOut className="h-5 w-5" />

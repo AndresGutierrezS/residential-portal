@@ -34,4 +34,5 @@ export interface User {
   id: number;
   email: string;
   person: Person;
+  is_admin: boolean;
 }

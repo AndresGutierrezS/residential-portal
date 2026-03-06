@@ -4,11 +4,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
+import { useAuthStore } from "@/auth/store/auth.store";
 
 export function HomePage() {
   const userUnit = localStorage.getItem("userUnit") || "N/A";
   const currentUser = localStorage.getItem("currentUser") || "Usuario";
-  const userName = currentUser.split('@')[0];
+  const user = useAuthStore(state => state.user);
 
   // Simulated user property data
   const propertyInfo = {
@@ -43,7 +44,7 @@ export function HomePage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
-              ¡Hola, {userName}! 👋
+              ¡Hola, {user?.person.name}! 👋
             </h1>
             <p className="text-gray-600 mt-1">
               Bienvenido a tu portal de residente

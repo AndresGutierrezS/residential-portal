@@ -43,7 +43,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         }
     },
     logout: async () => {
-        await logoutAction();
+        //await logoutAction();
         localStorage.removeItem('token');
         set({
             user: null,
@@ -71,7 +71,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     },
     isAdmin: () => {
         const user = get().user;
-        const role = user?.person.apartment_people?.[0].role?.role;
-        return role === 'admin';
+        if(!user) return false;
+        const role = user?.is_admin;
+        return role;
     }
 }));

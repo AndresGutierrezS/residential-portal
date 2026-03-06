@@ -2,11 +2,13 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { useChat } from "../hooks/useChat"
 import { MessageInput } from "./MessageInput"
 import { MessageList } from "./MessageList"
+import { useAuthStore } from "@/auth/store/auth.store";
 
 export const ChatContainer = () => {
   
     const {isLoading, messages, sendMessage} = useChat();
-    const currentUserId = Number(localStorage.getItem("userId"));
+    // const currentUserId = Number(localStorage.getItem("userId"));
+    const {user} = useAuthStore()
 
 
     return (
@@ -21,7 +23,7 @@ export const ChatContainer = () => {
                 <CardContent className="flex flex-col h-full overflow-hidden min-h-0">
                     <MessageList 
                         messages={messages} 
-                        currentUserId={currentUserId}
+                        currentUserId={Number(user?.id)}
                         isLoading={isLoading}
                     />
                     <MessageInput onSendMessage={sendMessage}/>

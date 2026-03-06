@@ -14,12 +14,18 @@ import { ExpensesPage } from "./admin/pages/ExpensesPage";
 import { EventsPage } from "./admin/pages/EventsPage";
 import { ReportsPage } from "./admin/pages/ReportsPage";
 import { AdminChatPage } from "./admin/pages/AdminChatPage";
+import { AdminRoute } from "./auth/guards/AdminRoute";
+import { AuthenticatedRoute } from "./auth/guards/AuthenticatedRoute";
+import { NotAuthenticatedRoute } from "./auth/guards/NotAuthenticatedRoute";
 
 
 export const appRouter = createBrowserRouter([
       {
         path: '/',
-        element: <ResidentLayout />,
+        element: 
+            <AuthenticatedRoute >
+                <ResidentLayout />
+            </AuthenticatedRoute>,
         children: [
             {
                 index: true,
@@ -34,7 +40,10 @@ export const appRouter = createBrowserRouter([
 
       {
         path: '/auth',
-        element: <AuthLayout />,
+        element: 
+            <NotAuthenticatedRoute >
+                <AuthLayout />
+            </NotAuthenticatedRoute>,
         children: [
             {
                 index: true,
@@ -45,7 +54,11 @@ export const appRouter = createBrowserRouter([
 
       {
         path: '/admin',
-        element: <AdminLayout />,
+        element: 
+            <AdminRoute >
+                <AdminLayout />
+            </AdminRoute>
+            ,
         children: [
             {
                 index: true,
