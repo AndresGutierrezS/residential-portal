@@ -9,7 +9,7 @@ import { DashboardPage } from "./admin/pages/DashboardPage";
 import { ResidentsPage } from "./admin/pages/ResidentsPage";
 import { UnitsPage } from "./admin/pages/UnitsPage";
 import { PaymentsPage } from "./admin/pages/PaymentsPage";
-import { CarsPage } from "./admin/pages/CarsPage";
+import { CarsPage } from "./admin/cars/pages/CarsPage";
 import { ExpensesPage } from "./admin/pages/ExpensesPage";
 import { EventsPage } from "./admin/pages/EventsPage";
 import { ReportsPage } from "./admin/pages/ReportsPage";
