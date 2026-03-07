@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Http\Request;
@@ -31,7 +32,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('notifications/{userId}', [NotificationController::class, 'store']);
     Route::patch('notifications/{userId}/read-all', [NotificationController::class, 'markAllAsRead']);
 
-});
+    
+    });
+    Route::apiResource('cars', CarController::class);
 
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(

@@ -25,7 +25,7 @@ class CarController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'apartment_id' => 'required|string|exists:apartments,id',
+            'apartment_id' => 'required|exists:apartments,id',
             'plate' => 'required|string|max:20',
             'brand' => 'required|string|max:50',
             'model' => 'required|string|max:50',
@@ -60,7 +60,7 @@ class CarController extends Controller
         $car = Car::find($id);
 
         $validated = $request->validate([
-            'apartment_id' => 'required|string|exists:apartments,id',
+            'apartment_id' => 'required|exists:apartments,id',
             'plate' => 'required|string|max:20',
             'brand' => 'required|string|max:50',
             'model' => 'required|string|max:50',
