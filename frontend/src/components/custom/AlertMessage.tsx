@@ -1,22 +1,26 @@
-import { CSSTransition } from "react-transition-group";
+import { CSSTransition } from "react-transition-group"
+import { useRef } from "react"
 
 interface Props {
-  show: boolean;
-  message: string;
-  type: "success" | "error";
+  show: boolean
+  message: string
+  type: "success" | "error"
 }
 
 export const AlertMessage = ({ show, message, type }: Props) => {
 
+  const nodeRef = useRef(null)
+
   const colors =
     type === "success"
       ? "bg-green-500"
-      : "bg-red-500";
+      : "bg-red-500"
 
   return (
     <CSSTransition
       in={show}
       timeout={300}
+      nodeRef={nodeRef}
       classNames={{
         enter: "opacity-0 -translate-y-4",
         enterActive:
@@ -27,10 +31,11 @@ export const AlertMessage = ({ show, message, type }: Props) => {
       unmountOnExit
     >
       <div
+        ref={nodeRef}
         className={`fixed top-6 right-6 px-6 py-3 rounded-lg text-white shadow-lg ${colors}`}
       >
         {message}
       </div>
     </CSSTransition>
-  );
-};
+  )
+}

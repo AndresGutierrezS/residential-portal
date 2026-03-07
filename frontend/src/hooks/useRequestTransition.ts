@@ -1,10 +1,10 @@
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 type AlertType = "success" | "error" | "info";
 
 export const useRequestTransition = () => {
 
-  const [isPending, startTransition] = useTransition();
+  const [loading, setLoading] = useState(false);
 
   const [showAlert, setShowAlert] = useState(false);
   const [message, setMessage] = useState("");
@@ -16,25 +16,27 @@ export const useRequestTransition = () => {
     errorMessage = "Ocurrió un error"
   ) => {
 
-    startTransition(async () => {
+    try {
 
-      try {
+      setLoading(true);
 
-        await action();
+      await action();
 
-        setType("success");
-        setMessage(successMessage);
-        setShowAlert(true);
+      setType("success");
+      setMessage(successMessage);
+      setShowAlert(true);
 
-      } catch (error) {
+    } catch (error) {
 
-        setType("error");
-        setMessage(errorMessage);
-        setShowAlert(true);
+      setType("error");
+      setMessage(errorMessage);
+      setShowAlert(true);
 
-      }
+    } finally {
 
-    });
+      setLoading(false);
+
+    }
 
   };
 
@@ -43,7 +45,7 @@ export const useRequestTransition = () => {
   };
 
   return {
-    loading: isPending,
+    loading,
     showAlert,
     message,
     type,
