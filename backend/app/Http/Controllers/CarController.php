@@ -45,7 +45,7 @@ class CarController extends Controller
      */
     public function show(string $id)
     {
-        $car = Car::find($id);
+        $car = Car::findOrFail($id);
 
         return response()->json([
             'data' => $car
@@ -57,7 +57,7 @@ class CarController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $car = Car::find($id);
+        $car = Car::findOrFail($id);
 
         $validated = $request->validate([
             'apartment_id' => 'required|exists:apartments,id',
@@ -80,7 +80,7 @@ class CarController extends Controller
      */
     public function destroy(string $id)
     {
-        $car = Car::find($id);
+        $car = Car::findOrFail($id);
 
         $car->delete();
 
