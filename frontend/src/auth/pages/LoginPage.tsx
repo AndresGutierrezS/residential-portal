@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SelectTrigger, SelectValue, SelectContent, SelectItem, Select } from "@/components/ui/select"
 import { useState } from "react"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { toast } from "sonner"
 import { useAuthStore } from "../store/auth.store"
 
@@ -75,6 +75,16 @@ export const LoginPage = () => {
         >
             {isLoading ? "Iniciando sesión..." : "Iniciar Sesión"}
         </Button>
+
+        <div className="text-center text-sm text-muted-foreground">
+         ¿No tienes una cuenta?{" "}
+            <Link
+            to="/auth/register"
+            className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+                Registrate
+            </Link>
+      </div>
     </form>
   )
 }
