@@ -17,6 +17,7 @@ import { AdminChatPage } from "./admin/pages/AdminChatPage";
 import { AdminRoute } from "./auth/guards/AdminRoute";
 import { AuthenticatedRoute } from "./auth/guards/AuthenticatedRoute";
 import { NotAuthenticatedRoute } from "./auth/guards/NotAuthenticatedRoute";
+import { RegisterPage } from "./auth/pages/RegisterPage";
 
 
 export const appRouter = createBrowserRouter([
@@ -48,6 +49,10 @@ export const appRouter = createBrowserRouter([
             {
                 index: true,
                 element: <LoginPage />
+            },
+            {
+                path: 'register',
+                element: <RegisterPage />
             }
         ]
       },

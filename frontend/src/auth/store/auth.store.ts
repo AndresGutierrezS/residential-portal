@@ -3,6 +3,8 @@ import { create } from "zustand";
 import { loginAction } from "../actions/login.action";
 import { logoutAction } from "../actions/logout.action";
 import { checkAuthAction } from "../actions/checkAuth.action";
+import type { RegisterDto } from "../interfaces/register.dto";
+import { registerAction } from "../actions/register.action";
 
 
 type AuthStatus = 
@@ -17,6 +19,7 @@ interface AuthState {
 
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => Promise<void>;
+    register: (payload: RegisterDto) => Promise<boolean>;
     checkAuthStatus: () => Promise<boolean>;
     isAdmin: () => boolean;
 }
@@ -50,6 +53,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             token: null,
             authStatus: 'not-authenticated'
         });
+    },
+    register: async (payload: RegisterDto) => {
+        try {
+            await registerAction(payload);
+            return true;
+        } catch (error) {
+            return false;      
+        }
     },
     checkAuthStatus: async () => {
         try {

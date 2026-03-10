@@ -5,7 +5,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\NotificationController;
+use App\Models\User;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 // Route::post('/messages', function (Request $request) {
 //     event(new MessageSent(
@@ -17,6 +20,7 @@ use Illuminate\Http\Request;
 // });
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('auth/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
     
     Route::post('logout', [AuthController::class, 'logout']);
@@ -46,6 +50,41 @@ Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
         'person.apartmentPeople.role'
     );
 });
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+
+    if (! URL::hasValidSignature($request)) {
+        return response()->json([
+            'message' => 'Invalid or expired verification link'
+        ], 401);
+    }
+
+    $user = User::findOrFail($id);
+
+    if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        return response()->json([
+            'message' => 'Invalid verification hash'
+        ], 401);
+    }
+
+    if (! $user->hasVerifiedEmail()) {
+        $user->markEmailAsVerified();
+    }
+
+    return response()->json([
+        'message' => 'Email verified successfully'
+    ]);
+
+})->middleware('signed')->name('verification.verify');
+
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return response()->json([
+        'message' => 'Verification email sent'
+    ]);
+})->middleware(['auth:sanctum', 'throttle:6,1'])->name('verification.send');
 
 
 
