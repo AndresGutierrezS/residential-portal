@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
 use App\Models\User;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -51,31 +52,36 @@ Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     );
 });
 
-Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware('signed')
+    ->name('verification.verify');
 
-    if (! URL::hasValidSignature($request)) {
-        return response()->json([
-            'message' => 'Invalid or expired verification link'
-        ], 401);
-    }
+// Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
 
-    $user = User::findOrFail($id);
+//     if (! URL::hasValidSignature($request)) {
+//         return response()->json([
+//             'message' => 'Invalid or expired verification link'
+//         ], 401);
+//     }
 
-    if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
-        return response()->json([
-            'message' => 'Invalid verification hash'
-        ], 401);
-    }
+//     $user = User::findOrFail($id);
 
-    if (! $user->hasVerifiedEmail()) {
-        $user->markEmailAsVerified();
-    }
+//     if (! hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+//         return response()->json([
+//             'message' => 'Invalid verification hash'
+//         ], 401);
+//     }
 
-    return response()->json([
-        'message' => 'Email verified successfully'
-    ]);
+//     if (! $user->hasVerifiedEmail()) {
+//         $user->markEmailAsVerified();
+//     }
 
-})->middleware('signed')->name('verification.verify');
+//     return response()->json([
+//         'message' => 'Email verified successfully'
+//     ]);
+
+// })->middleware('signed')->name('verification.verify');
+
 
 
 Route::post('/email/verification-notification', function (Request $request) {
