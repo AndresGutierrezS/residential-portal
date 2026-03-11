@@ -18,6 +18,7 @@ import { AdminRoute } from "./auth/guards/AdminRoute";
 import { AuthenticatedRoute } from "./auth/guards/AuthenticatedRoute";
 import { NotAuthenticatedRoute } from "./auth/guards/NotAuthenticatedRoute";
 import { RegisterPage } from "./auth/pages/RegisterPage";
+import { VerifyEmailPage } from "./auth/pages/VerifyEmailPage";
 
 
 export const appRouter = createBrowserRouter([
@@ -53,6 +54,10 @@ export const appRouter = createBrowserRouter([
             {
                 path: 'register',
                 element: <RegisterPage />
+            },
+            {
+                path: 'verify-email',
+                element: <VerifyEmailPage />
             }
         ]
       },

@@ -6,10 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export const AuthLayout = () => {
   const location = useLocation();
 
-  const subtitle =
-    location.pathname === "/auth/register"
-      ? "Crear una cuenta"
-      : "Iniciar sesión";
+  const subtitleMap: Record<string, string> = {
+    "/auth": "Iniciar sesión",
+    "/auth/register": "Crear una cuenta",
+    "/auth/verify-email": "Verificación de correo"
+  };
+
+const subtitle = subtitleMap[location.pathname] ?? "";
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
