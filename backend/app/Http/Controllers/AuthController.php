@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Person;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -46,16 +47,28 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $request->validate([
+            'name' => 'required',
+            'last_name' => 'required',
+            'second_last_name' => 'required',
+            'phone' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6|confirmed'
         ]);
 
         try {
+            $person = Person::create([
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'second_last_name' => $request->second_last_name,
+                'phone' => $request->phone,
+                'is_active' => true
+            ]);
+
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'is_admin' => false,
-                'person_id' => 1
+                'person_id' => $person->id,
             ]);
 
             event(new Registered($user));

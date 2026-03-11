@@ -7,7 +7,6 @@ export const registerAction = async (payload: RegisterDto): Promise<RegisterResp
 
     try {
         const { data } = await portalGateApi.post<RegisterResponse>('auth/register', payload)
-        console.log(data);
         return data;
 
     } catch (error) {

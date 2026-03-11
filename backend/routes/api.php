@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('notifications/{userId}/read-all', [NotificationController::class, 'markAllAsRead']);
 
     
-    });
+});
     
 Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('cars', CarController::class);
