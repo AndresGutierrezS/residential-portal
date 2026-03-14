@@ -27,7 +27,9 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $device = $request->device_name ?? $request->userAgent();
+
+        $token = $user->createToken($device)->plainTextToken;
 
         return response()->json([
             'user' => $user->load('person'),
