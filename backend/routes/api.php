@@ -6,6 +6,7 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\ResidentController;
 use Illuminate\Http\Request;
 
 
@@ -33,9 +34,9 @@ Route::middleware('auth:sanctum')->group(function () {
     
 Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('cars', CarController::class);
-        
+    Route::apiResource('residents', ResidentController::class);
 });
-
+    
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(
         'person.apartments',
