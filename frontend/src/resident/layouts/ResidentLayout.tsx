@@ -88,7 +88,7 @@ export const ResidentLayout = () => {
             <div className="flex items-center gap-3">
               {user?.is_admin && (
                 <Link to={'/admin'}>
-                  <Button className="bg-red-400 text-white text-center border">Admin</Button>
+                  <Button className="bg-red-400 text-white text-center border cursor-pointer">Admin</Button>
                 </Link>
               )}
               <NotificationBell />

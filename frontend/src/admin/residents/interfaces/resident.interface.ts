@@ -24,6 +24,30 @@ export interface Resident {
     phone: string;
 }
 
+export interface CreateResidentDTO {
+  person: {
+    name: string;
+    last_name: string;
+    second_last_name?: string;
+    phone: string;
+  };
+  role_id: number;
+  code: string;
+  email: string;
+}
+
+export interface UpdateResidentDTO {
+  person: {
+    name?: string;
+    last_name?: string;
+    second_last_name?: string;
+    phone?: string;
+  };
+  role_id?: number;
+  code?: string;
+  email?: string;
+}
+
 
 
 

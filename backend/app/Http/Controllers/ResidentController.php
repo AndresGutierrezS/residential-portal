@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Apartment;
 use App\Models\ApartmentPerson;
+use App\Models\Person;
 use Illuminate\Http\Request;
 
 class ResidentController extends Controller
@@ -25,21 +27,42 @@ class ResidentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'person_id' => 'required|exists:people,id',
-            'apartment_id' => 'required|exists:apartments,id',
+            'name' => 'required|string',
+            'last_name' => 'required|string',
+            'second_last_name' => 'nullable|string',
+            'phone' => 'required|string',
+            'email' => 'requierd',
             'role_id' => 'required|exists:roles,id',
-            'code' => 'nullable|string|max:50',
+            'code' => 'required|string|exists:apartments,code',
         ]);
 
-        $resident = ApartmentPerson::create([
-            'person_id' => $request->person_id,
-            'apartment_id' => $request->apartment_id,
-            'role_id' => $request->role_id,
-            'is_resident' => true,
-            'code' => $request->code,
-        ]);
+        try {
+            $person = Person::create([
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'second_last_name' => $request->second_last_name,
+                'phone' => $request->phone,
+                'is_active' => true,
+            ]);
+    
+            $apartment = Apartment::where('code', $request->code)->firstOrFail();
+    
+            $resident = ApartmentPerson::create([
+                'person_id' => $person->id,
+                'apartment_id' => $apartment->code,
+                'role_id' => $request->role_id,
+                'is_resident' => true,
+                'code' => $request->code,
+            ]);
+    
+            return response()->json($resident, 201);
 
-        return response()->json($resident, 201);
+        } catch (\Exception $e) {
+            
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
