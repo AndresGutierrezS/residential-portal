@@ -1,6 +1,6 @@
-import type { Apartment } from "./Apartment.interface";
-import type { Person } from "./Person.interface";
-import type { Role } from "./Role.interface";
+import type { Apartment } from "./apartment.interface";
+import type { Person } from "./person.interface";
+import type { Role } from "./role.interface";
 
 export interface ResidentResponse {
     id:           number;
