@@ -86,6 +86,11 @@ export const ResidentLayout = () => {
 
             {/* Right side */}
             <div className="flex items-center gap-3">
+              {user?.is_admin && (
+                <Link to={'/admin'}>
+                  <Button className="bg-red-400 text-white text-center border">Admin</Button>
+                </Link>
+              )}
               <NotificationBell />
               <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded-lg">
                 <User className="h-4 w-4 text-gray-600" />

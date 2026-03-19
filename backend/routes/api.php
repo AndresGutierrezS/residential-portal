@@ -34,8 +34,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
 Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('cars', CarController::class);
+    });
     Route::apiResource('residents', ResidentController::class);
-});
     
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(
