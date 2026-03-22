@@ -3,16 +3,17 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input"
 import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from "@/components/ui/table"
 import { Search, Edit, Trash2, Mail } from "lucide-react"
+import type { Resident } from "../interfaces/resident.interface"
 
-interface Resident {
-    id: string;
-    name: string;
-    unit: string;
-    email: string;
-    phone: string;
-    hasAccount?: boolean;
-    accountStatus?: "pending" | 'active';
-}
+// interface Resident {
+//     id: string;
+//     name: string;
+//     unit: string;
+//     email: string;
+//     phone: string;
+//     hasAccount?: boolean;
+//     accountStatus?: "pending" | 'active';
+// }
 
 interface Props {
     residents: Resident[];
@@ -64,8 +65,8 @@ export const ResidentsTable = ({actions, residents, searchTerm, setSearchTerm}: 
                 <TableBody>
                 {residents.map((resident) => (
                     <TableRow key={resident.id}>
-                    <TableCell className="font-medium">{resident.name}</TableCell>
-                    <TableCell>{resident.unit}</TableCell>
+                    <TableCell className="font-medium">{resident.fullname}</TableCell>
+                    <TableCell>{resident.code}</TableCell>
                     <TableCell>{resident.email}</TableCell>
                     <TableCell>{resident.phone}</TableCell>
                     <TableCell className="text-right">
@@ -84,7 +85,7 @@ export const ResidentsTable = ({actions, residents, searchTerm, setSearchTerm}: 
                         >
                             <Trash2 className="h-4 w-4 text-red-600" />
                         </Button>
-                        {resident.hasAccount && resident.accountStatus === "pending" && (
+                        {/* {resident.hasAccount && resident.accountStatus === "pending" && (
                             <Button
                             variant="ghost"
                             size="icon"
@@ -101,7 +102,7 @@ export const ResidentsTable = ({actions, residents, searchTerm, setSearchTerm}: 
                             >
                             <Mail className="h-4 w-4 text-blue-600" />
                             </Button>
-                        )}
+                        )} */}
                         </div>
                     </TableCell>
                     </TableRow>

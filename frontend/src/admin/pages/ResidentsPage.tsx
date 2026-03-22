@@ -6,23 +6,31 @@ import { PageHeader } from "../components/PageHeader";
 import { ResidentsTable } from "../residents/components/ResidentsTable";
 import { ResidentFormDialog } from "../residents/components/ResidentFormDialog";
 import { DeleteResidentDialog } from "../residents/components/DeleteResidentDialog";
+import { useResidents } from "../residents/hooks/useResidents";
+import type { Resident } from "../residents/interfaces/resident.interface";
 
-interface Resident {
-  id: string;
-  name: string;
-  unit: string;
-  email: string;
-  phone: string;
-  hasAccount?: boolean;
-  accountStatus?: "pending" | "active";
-}
+// interface Resident {
+//   id: string;
+//   name: string;
+//   unit: string;
+//   email: string;
+//   phone: string;
+//   hasAccount?: boolean;
+//   accountStatus?: "pending" | "active";
+// }
 
 export const ResidentsPage = () => {
   const [residents, setResidents] = useState<Resident[]>([
-    { id: "1", name: "Juan Pérez", unit: "101", email: "juan@email.com", phone: "555-0101" },
-    { id: "2", name: "María González", unit: "202", email: "maria@email.com", phone: "555-0202" },
-    { id: "3", name: "Carlos Rodríguez", unit: "303", email: "carlos@email.com", phone: "555-0303" },
+    {
+     code: '123',
+     email: 'example',
+     fullname: 'fdasfas',
+     id: 1,
+     phone: '342134' 
+    }
   ]);
+
+  const {residents: newResidents} = useResidents();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -33,8 +41,8 @@ export const ResidentsPage = () => {
   const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
 
   const filteredResidents = residents.filter((resident) =>
-    resident.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    resident.unit.toLowerCase().includes(searchTerm.toLowerCase())
+    resident.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    resident.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
 
@@ -115,7 +123,7 @@ export const ResidentsPage = () => {
           : r
       )
     );
-    toast.success(`Cuenta activada para ${resident.name}`);
+    //toast.success(`Cuenta activada para ${resident.name}`);
   };
 
   return (
@@ -132,7 +140,7 @@ export const ResidentsPage = () => {
       />
 
       <ResidentsTable 
-        residents={filteredResidents}
+        residents={newResidents}
         isLoading={true}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -155,7 +163,7 @@ export const ResidentsPage = () => {
          onConfirm={confirmDelete}
          onOpenChange={setIsDeleteDialogOpen}
          open={isDeleteDialogOpen}
-         resident={selectedResident}
+         resident={newResidents[0]}
       />
 
     </div>
