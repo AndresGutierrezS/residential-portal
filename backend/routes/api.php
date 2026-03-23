@@ -6,11 +6,15 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ResidentController;
 use Illuminate\Http\Request;
 
 
 Route::post('login', [AuthController::class, 'login']);
+Route::post('forgot-password', [PasswordResetController::class, 'sendCode']);
+Route::post('verify-code', [PasswordResetController::class, 'verifyCode']);
+Route::post('reset-password', [PasswordResetController::class, 'resetPassword']);
 
 Route::post('auth/register', [AuthController::class, 'register']);
 Route::middleware('auth:sanctum')->group(function () {
