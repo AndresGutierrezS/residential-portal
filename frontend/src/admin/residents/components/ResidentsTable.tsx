@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { TableHeader, TableRow, TableHead, TableBody, TableCell, Table } from "@/components/ui/table"
 import { Search, Edit, Trash2, Mail } from "lucide-react"
 import type { Resident } from "../interfaces/resident.interface"
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner"
 
 // interface Resident {
 //     id: string;
@@ -28,7 +29,11 @@ interface Props {
     }
 }
 
-export const ResidentsTable = ({actions, residents, searchTerm, setSearchTerm}: Props) => {
+export const ResidentsTable = ({actions, residents, searchTerm, setSearchTerm, isLoading}: Props) => {
+
+    if(isLoading) {
+        return <LoadingSpinner show/>
+    }
 
     return (
         <Card>
@@ -65,7 +70,7 @@ export const ResidentsTable = ({actions, residents, searchTerm, setSearchTerm}: 
                 <TableBody>
                 {residents.map((resident) => (
                     <TableRow key={resident.id}>
-                    <TableCell className="font-medium">{resident.fullname}</TableCell>
+                    <TableCell className="font-medium">{resident.fullName}</TableCell>
                     <TableCell>{resident.code}</TableCell>
                     <TableCell>{resident.email}</TableCell>
                     <TableCell>{resident.phone}</TableCell>

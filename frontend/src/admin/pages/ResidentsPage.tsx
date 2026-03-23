@@ -7,30 +7,12 @@ import { ResidentsTable } from "../residents/components/ResidentsTable";
 import { ResidentFormDialog } from "../residents/components/ResidentFormDialog";
 import { DeleteResidentDialog } from "../residents/components/DeleteResidentDialog";
 import { useResidents } from "../residents/hooks/useResidents";
-import type { Resident } from "../residents/interfaces/resident.interface";
+import type { CreateResidentDTO, Resident } from "../residents/interfaces/resident.interface";
 
-// interface Resident {
-//   id: string;
-//   name: string;
-//   unit: string;
-//   email: string;
-//   phone: string;
-//   hasAccount?: boolean;
-//   accountStatus?: "pending" | "active";
-// }
 
 export const ResidentsPage = () => {
-  const [residents, setResidents] = useState<Resident[]>([
-    {
-     code: '123',
-     email: 'example',
-     fullname: 'fdasfas',
-     id: 1,
-     phone: '342134' 
-    }
-  ]);
 
-  const {residents: newResidents} = useResidents();
+  const { residents, createResident, isError, isLoading } = useResidents();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -41,7 +23,7 @@ export const ResidentsPage = () => {
   const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
 
   const filteredResidents = residents.filter((resident) =>
-    resident.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    resident.fullName.toLowerCase()!.includes(searchTerm.toLowerCase()) ||
     resident.code.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -54,7 +36,7 @@ export const ResidentsPage = () => {
   const confirmDelete = () => {
     if (!selectedResident) return;
 
-    setResidents(residents.filter((r) => r.id !== selectedResident.id));
+    //setResidents(residents.filter((r) => r.id !== selectedResident.id));
     toast.success("Residente eliminado correctamente");
 
     setIsDeleteDialogOpen(false);
@@ -71,27 +53,21 @@ export const ResidentsPage = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSave = (data: any) => {
-    if (!data.name || !data.unit || !data.email || !data.phone) {
-      toast.error("Por favor complete todos los campos");
-      return;
-    }
+  const handleSave = (data: CreateResidentDTO) => {
+    // if (!data.person || !data.code || !data.email) {
+    //   toast.error("Por favor complete todos los campos");
+    //   return;
+    // }
 
-    if (selectedResident) {
-      setResidents(
-        residents.map((r) =>
-          r.id === selectedResident.id ? { ...r, ...data } : r
-        )
-      );
-      toast.success("Residente actualizado correctamente");
-    } else {
-      const newResident: Resident = {
-        id: Date.now().toString(),
-        ...data,
-      };
-      setResidents([...residents, newResident]);
-      toast.success("Residente agregado correctamente");
-    }
+    createResident(data, {
+      onSuccess: () => {
+        toast.success("Residente agregado correctamente");
+        setIsDialogOpen(false);
+      },
+      onError: () => {
+        toast.error("Error al crear residente");
+      }
+    });
 
     setIsDialogOpen(false);
   };
@@ -101,13 +77,13 @@ export const ResidentsPage = () => {
     const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     
     // Update resident with account pending status
-    setResidents(
-      residents.map((r) =>
-        r.id === resident.id 
-          ? { ...r, hasAccount: true, accountStatus: "pending" } 
-          : r
-      )
-    );
+    // setResidents(
+    //   residents.map((r) =>
+    //     r.id === resident.id 
+    //       ? { ...r, hasAccount: true, accountStatus: "pending" } 
+    //       : r
+    //   )
+    // );
     
     // Simulate sending email with token
     toast.success(`Invitación enviada a ${resident.email}`, {
@@ -116,13 +92,13 @@ export const ResidentsPage = () => {
   };
 
   const handleActivateAccount = (resident: Resident) => {
-    setResidents(
-      residents.map((r) =>
-        r.id === resident.id 
-          ? { ...r, accountStatus: "active" } 
-          : r
-      )
-    );
+    // setResidents(
+    //   residents.map((r) =>
+    //     r.id === resident.id 
+    //       ? { ...r, accountStatus: "active" } 
+    //       : r
+    //   )
+    // );
     //toast.success(`Cuenta activada para ${resident.name}`);
   };
 
@@ -140,8 +116,8 @@ export const ResidentsPage = () => {
       />
 
       <ResidentsTable 
-        residents={newResidents}
-        isLoading={true}
+        residents={filteredResidents}
+        isLoading={isLoading}
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
         actions={{
@@ -155,7 +131,7 @@ export const ResidentsPage = () => {
       <ResidentFormDialog 
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        resident={selectedResident}
+        resident={null}
         onSubmit={handleSave}
       />
 
@@ -163,7 +139,7 @@ export const ResidentsPage = () => {
          onConfirm={confirmDelete}
          onOpenChange={setIsDeleteDialogOpen}
          open={isDeleteDialogOpen}
-         resident={newResidents[0]}
+         resident={residents[0]}
       />
 
     </div>

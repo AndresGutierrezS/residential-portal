@@ -31,7 +31,7 @@ class ResidentController extends Controller
             'last_name' => 'required|string',
             'second_last_name' => 'nullable|string',
             'phone' => 'required|string',
-            'email' => 'requierd',
+            'email' => 'required',
             'role_id' => 'required|exists:roles,id',
             'code' => 'required|string|exists:apartments,code',
         ]);
@@ -49,7 +49,7 @@ class ResidentController extends Controller
     
             $resident = ApartmentPerson::create([
                 'person_id' => $person->id,
-                'apartment_id' => $apartment->code,
+                'apartment_id' => $apartment->id,
                 'role_id' => $request->role_id,
                 'is_resident' => true,
                 'code' => $request->code,

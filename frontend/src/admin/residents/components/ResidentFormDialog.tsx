@@ -3,11 +3,12 @@ import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFoot
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
+import type { CreateResidentDTO } from "../interfaces/resident.interface";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  resident: any | null;
+  resident: CreateResidentDTO | null;
   onSubmit: (data: any) => void;
 }
 
@@ -20,7 +21,9 @@ export const ResidentFormDialog = ({
 
   const [formData, setFormData] = useState({
     name: "",
-    unit: "",
+    last_name: "",
+    second_last_name: "",
+    code: "",
     email: "",
     phone: "",
   });
@@ -29,14 +32,18 @@ export const ResidentFormDialog = ({
     if (resident) {
       setFormData({
         name: resident.name || "",
-        unit: resident.unit || "",
+        last_name: resident.last_name || "",
+        second_last_name: resident.second_last_name || "",
+        code: resident.code || "",
         email: resident.email || "",
         phone: resident.phone || "",
       });
     } else {
       setFormData({
         name: "",
-        unit: "",
+        last_name: "",
+        second_last_name: "",
+        code: "",
         email: "",
         phone: "",
       });
@@ -44,7 +51,16 @@ export const ResidentFormDialog = ({
   }, [resident, open]);
 
   const handleSubmit = () => {
-    onSubmit(formData);
+    const payload = {
+        name: formData.name,
+        last_name: formData.last_name,
+        second_last_name: formData.second_last_name,
+        phone: formData.phone,
+        email: formData.email,
+        code: formData.code,
+        role_id: 1, // temporal
+    };
+    onSubmit(payload);
   };
 
     return (
@@ -63,24 +79,48 @@ export const ResidentFormDialog = ({
                 <div className="space-y-4 py-4">
                 
                 <div className="space-y-2">
-                    <Label htmlFor="name">Nombre Completo</Label>
+                    <Label htmlFor="name">Nombre</Label>
                     <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                     }
-                    placeholder="Juan Pérez"
+                    placeholder="Juan"
                     />
                 </div>
 
                 <div className="space-y-2">
-                    <Label htmlFor="unit">Unidad</Label>
+                    <Label htmlFor="last_name">Apellido Paterno</Label>
                     <Input
-                    id="unit"
-                    value={formData.unit}
+                    id="last_name"
+                    value={formData.last_name}
                     onChange={(e) =>
-                        setFormData({ ...formData, unit: e.target.value })
+                        setFormData({ ...formData, last_name: e.target.value })
+                    }
+                    placeholder="Pérez"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="second_last_name">Apellido Materno</Label>
+                    <Input
+                    id="second_last_name"
+                    value={formData.second_last_name}
+                    onChange={(e) =>
+                        setFormData({ ...formData, second_last_name: e.target.value })
+                    }
+                    placeholder="Pérez"
+                    />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="code">Código</Label>
+                    <Input
+                    id="code"
+                    value={formData.code}
+                    onChange={(e) =>
+                        setFormData({ ...formData, code: e.target.value })
                     }
                     placeholder="101"
                     />

@@ -18,22 +18,20 @@ export interface ResidentResponse {
 
 export interface Resident {
     id: number;
-    fullname: string;
+    fullName: string;
     code: string;
     email: string;
     phone: string;
 }
 
 export interface CreateResidentDTO {
-  person: {
-    name: string;
-    last_name: string;
-    second_last_name?: string;
-    phone: string;
-  };
+  name: string;
+  last_name: string;
+  second_last_name?: string;
+  phone: string;  
+  email: string;
   role_id: number;
   code: string;
-  email: string;
 }
 
 export interface UpdateResidentDTO {

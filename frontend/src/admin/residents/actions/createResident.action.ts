@@ -7,6 +7,8 @@ export const createResidentAction = async (payload: CreateResidentDTO): Promise<
         return data;
         
     } catch (error) {
+        console.log(payload);
+        console.log(error);
         throw error;
     }
 }
