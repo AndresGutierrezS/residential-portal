@@ -7,19 +7,16 @@ import { ResidentsTable } from "../residents/components/ResidentsTable";
 import { ResidentFormDialog } from "../residents/components/ResidentFormDialog";
 import { DeleteResidentDialog } from "../residents/components/DeleteResidentDialog";
 import { useResidents } from "../residents/hooks/useResidents";
-import type { CreateResidentDTO, Resident } from "../residents/interfaces/resident.interface";
+import type { ResidentDTO, Resident } from "../residents/interfaces/resident.interface";
 
 
 export const ResidentsPage = () => {
 
-  const { residents, createResident, isError, isLoading } = useResidents();
+  const { residents, createResident, isLoading, deleteResident, updateResident } = useResidents();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [editingResident, setEditingResident] = useState<Resident | null>(null);
-  const [deletingResident, setDeletingResident] = useState<Resident | null>(null);
-  const [formData, setFormData] = useState({ name: "", unit: "", email: "", phone: "" });
   const [selectedResident, setSelectedResident] = useState<Resident | null>(null);
 
   const filteredResidents = residents.filter((resident) =>
@@ -36,11 +33,12 @@ export const ResidentsPage = () => {
   const confirmDelete = () => {
     if (!selectedResident) return;
 
-    //setResidents(residents.filter((r) => r.id !== selectedResident.id));
-    toast.success("Residente eliminado correctamente");
-
-    setIsDeleteDialogOpen(false);
-    setSelectedResident(null);
+    deleteResident(selectedResident.id, {
+      onSuccess: () => {
+        toast.success("Residente eliminado");
+        setIsDeleteDialogOpen(false);
+      },
+    });
   };
 
   const handleAdd = () => {
@@ -53,23 +51,28 @@ export const ResidentsPage = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSave = (data: CreateResidentDTO) => {
-    // if (!data.person || !data.code || !data.email) {
-    //   toast.error("Por favor complete todos los campos");
-    //   return;
-    // }
-
-    createResident(data, {
-      onSuccess: () => {
-        toast.success("Residente agregado correctamente");
-        setIsDialogOpen(false);
-      },
-      onError: () => {
-        toast.error("Error al crear residente");
-      }
-    });
-
-    setIsDialogOpen(false);
+  const handleSave = (data: ResidentDTO) => {
+    if (selectedResident) {
+      updateResident(
+        { id: selectedResident.id, payload: data },
+        {
+          onSuccess: () => {
+            toast.success("Residente actualizado");
+            setIsDialogOpen(false);
+          },
+        }
+      );
+    } else {
+      createResident(data, {
+        onSuccess: () => {
+          toast.success("Residente agregado correctamente");
+          setIsDialogOpen(false);
+        },
+        onError: () => {
+          toast.error("Error al crear residente");
+        }
+      });
+    }
   };
 
   const handleSendInvitation = (resident: Resident) => {
@@ -131,7 +134,7 @@ export const ResidentsPage = () => {
       <ResidentFormDialog 
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
-        resident={null}
+        resident={selectedResident}
         onSubmit={handleSave}
       />
 
@@ -139,7 +142,7 @@ export const ResidentsPage = () => {
          onConfirm={confirmDelete}
          onOpenChange={setIsDeleteDialogOpen}
          open={isDeleteDialogOpen}
-         resident={residents[0]}
+         resident={selectedResident}
       />
 
     </div>

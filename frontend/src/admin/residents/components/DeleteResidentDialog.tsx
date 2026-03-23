@@ -1,15 +1,6 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog"
 import type { Resident } from '../interfaces/resident.interface'
 
-// interface Resident {
-//     id: string;
-//     name: string;
-//     unit: string;
-//     email: string;
-//     phone: string;
-//     hasAccount?: boolean;
-//     accountStatus?: "pending" | 'active';
-// }
 
 interface Props {
     open: boolean;
@@ -26,7 +17,7 @@ export const DeleteResidentDialog = ({onOpenChange, open, resident, onConfirm}: 
                 <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
                 <AlertDialogDescription>
                 Esta acción no se puede deshacer. Se eliminará permanentemente el residente{" "}
-                <strong>{resident?.fullname}</strong> de la unidad{" "}
+                <strong>{resident?.fullName}</strong> de la unidad{" "}
                 <strong>{resident?.code}</strong>.
                 </AlertDialogDescription>
             </AlertDialogHeader>

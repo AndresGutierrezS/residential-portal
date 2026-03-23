@@ -78,17 +78,39 @@ class ResidentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $resident = ApartmentPerson::findOrFail($id);
-
         $request->validate([
-            'role_id' => 'sometimes|exists:roles,id',
-            'code' => 'nullable|string|max:50',
-            'is_resident' => 'sometimes|boolean',
+            'name' => 'required|string',
+            'last_name' => 'required|string',
+            'second_last_name' => 'nullable|string',
+            'phone' => 'required|string',
+            'email' => 'required',
+            'role_id' => 'required|exists:roles,id',
+            'code' => 'required|string|exists:apartments,code',
         ]);
 
-        $resident->update($request->only(['role_id', 'code', 'is_resident']));
+        try {
+            $resident = ApartmentPerson::findOrFail($id);
 
-        return response()->json($resident);
+            $resident->person->update([
+                'name' => $request->name,
+                'last_name' => $request->last_name,
+                'second_last_name' => $request->second_last_name,
+                'phone' => $request->phone,
+            ]);
+
+            $apartment = Apartment::where('code', $request->code)->firstOrFail();
+
+            $resident->update([
+                'apartment_id' => $apartment->id,
+                'role_id' => $request->role_id,
+            ]);
+
+            return response()->json($resident->load(['person', 'apartment', 'role']));
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -96,10 +118,19 @@ class ResidentController extends Controller
      */
     public function destroy($id)
     {
-        $resident = ApartmentPerson::findOrFail($id);
-        $resident->delete();
+        try {
+            $resident = ApartmentPerson::findOrFail($id);
 
-        return response()->json(['message' => 'Resident removed successfully']);
+            $resident->delete();
+
+            return response()->json([
+                'message' => 'Residente eliminado'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function residentsByApartment($apartment_id)

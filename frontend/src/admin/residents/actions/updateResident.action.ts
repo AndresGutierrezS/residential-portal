@@ -1,9 +1,9 @@
 import { portalGateApi } from "@/api/portalGateApi";
-import type { ResidentResponse, UpdateResidentDTO } from "../interfaces/resident.interface";
+import type { ResidentResponse, ResidentDTO } from "../interfaces/resident.interface";
 
 export const updateResidentAction = async (
     id: number, 
-    payload: UpdateResidentDTO
+    payload: ResidentDTO
 ): Promise<ResidentResponse> => {
     try {
         const { data } = await portalGateApi.put<ResidentResponse>(`/residents/${id}`, payload);

@@ -6,16 +6,6 @@ import { Search, Edit, Trash2, Mail } from "lucide-react"
 import type { Resident } from "../interfaces/resident.interface"
 import { LoadingSpinner } from "@/components/custom/LoadingSpinner"
 
-// interface Resident {
-//     id: string;
-//     name: string;
-//     unit: string;
-//     email: string;
-//     phone: string;
-//     hasAccount?: boolean;
-//     accountStatus?: "pending" | 'active';
-// }
-
 interface Props {
     residents: Resident[];
     searchTerm: string;

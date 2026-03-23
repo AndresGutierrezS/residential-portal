@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('last_name');
-            $table->string('second_last_name');
+            $table->string('second_last_name')->nullable();
             $table->string('phone');
             $table->boolean('is_active');
             $table->timestamps();

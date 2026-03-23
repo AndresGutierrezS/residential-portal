@@ -3,12 +3,12 @@ import { DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFoot
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
-import type { CreateResidentDTO } from "../interfaces/resident.interface";
+import type { Resident } from "../interfaces/resident.interface";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  resident: CreateResidentDTO | null;
+  resident: Resident | null;
   onSubmit: (data: any) => void;
 }
 
@@ -30,10 +30,11 @@ export const ResidentFormDialog = ({
 
   useEffect(() => {
     if (resident) {
+        const nameParts = resident.fullName.split(' ');
       setFormData({
-        name: resident.name || "",
-        last_name: resident.last_name || "",
-        second_last_name: resident.second_last_name || "",
+        name: nameParts[0] || "",
+        last_name: nameParts[1] || "",
+        second_last_name: nameParts[2] || "",
         code: resident.code || "",
         email: resident.email || "",
         phone: resident.phone || "",
@@ -54,7 +55,7 @@ export const ResidentFormDialog = ({
     const payload = {
         name: formData.name,
         last_name: formData.last_name,
-        second_last_name: formData.second_last_name,
+        second_last_name: formData.second_last_name || null,
         phone: formData.phone,
         email: formData.email,
         code: formData.code,

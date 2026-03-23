@@ -4,7 +4,7 @@ export const mapResident = (r: ResidentResponse): Resident => {
 
     return ({
         id: r.id,
-        fullName: `${r.person.name} ${r.person.last_name}`,
+        fullName: `${r.person.name} ${r.person.last_name} ${r.person.second_last_name ? r.person.second_last_name : ''}`,
         code: r.code,
         email: 'email@example.com',
         phone: r.person.phone,
