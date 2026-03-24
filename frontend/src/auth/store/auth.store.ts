@@ -64,6 +64,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     },
     checkAuthStatus: async () => {
         try {
+            const token = localStorage.getItem('token');
+            if (!token) throw new Error();
+            
             const data = await checkAuthAction();
             set({
                 user: data.user,

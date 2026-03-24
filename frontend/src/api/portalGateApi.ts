@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/auth/store/auth.store';
 import axios from 'axios';
 
 export const portalGateApi = axios.create({
@@ -18,3 +19,18 @@ portalGateApi.interceptors.request.use((config) => {
 
     return config;
 });
+
+portalGateApi.interceptors.response.use(
+    (response) => response,
+    (error) => {
+
+        if (error.response?.status === 401) {
+            const logout = useAuthStore.getState().logout;
+            logout();
+
+            window.location.href = '/auth';
+        }
+
+        return Promise.reject(error);
+    }
+);

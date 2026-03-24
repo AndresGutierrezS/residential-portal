@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useAuthStore } from "../store/auth.store"
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
 
 export const CheckAuthProvider = ({children}: any) => {
     
@@ -12,7 +13,7 @@ export const CheckAuthProvider = ({children}: any) => {
         staleTime: 1000 * 60 * 5,
     }) 
 
-    if(isLoading) return <div>Loading...</div>;
+    if(isLoading) return <LoadingSpinner show/>
 
     return children;
 }

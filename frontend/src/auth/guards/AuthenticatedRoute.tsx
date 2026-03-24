@@ -1,11 +1,14 @@
 import { Navigate } from "react-router";
 import { useAuthStore } from "../store/auth.store";
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
 
 export const AuthenticatedRoute = ({ children }: any) => {
 
     const status = useAuthStore(state => state.authStatus);
 
-    if (status !== 'authenticated') {
+    if(status === 'checking') return <LoadingSpinner show/>
+
+    if(status !== 'authenticated') {
         return <Navigate to="/auth" replace />;
     }
 
