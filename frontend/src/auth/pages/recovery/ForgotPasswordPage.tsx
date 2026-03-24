@@ -1,31 +1,31 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useRecovery } from "@/auth/hooks/recovery/useRecovery";
+import { toast } from "sonner";
 
 export const ForgotPasswordPage = () => {
 
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+
+  const navigate = useNavigate();
+  const { sendCode, sending } = useRecovery();
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch("/api/forgot-password", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email })
-      });
+      const res = await sendCode(email);
 
-      const data = await res.json();
-      setMessage(data.message);
-    } catch (error) {
-      setMessage("Error al enviar el código");
+      toast.success(res.message || "Código enviado");
+
+      navigate(`/auth/verify-code?email=${encodeURIComponent(email)}`);
+    } catch (e: any) {
+      toast.error(e.message || "Error al enviar código");
     }
   };
 
   return (
-    <div className="flex flex-col space-y-4 w-full max-w-sm">
+    <div className="flex flex-col items-center space-y-4 w-full max-w-sm">
 
       <h2 className="text-xl font-semibold text-center">
         Recuperar contraseña
@@ -37,15 +37,13 @@ export const ForgotPasswordPage = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
 
-      <Button onClick={handleSubmit}>
-        Enviar código
+      <Button
+        onClick={handleSubmit}
+        disabled={sending || !email}
+        className="w-full"
+      >
+        {sending ? "Enviando..." : "Enviar código"}
       </Button>
-
-      {message && (
-        <p className="text-sm text-center text-muted-foreground">
-          {message}
-        </p>
-      )}
 
     </div>
   );

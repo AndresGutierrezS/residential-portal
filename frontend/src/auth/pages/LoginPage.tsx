@@ -68,6 +68,14 @@ export const LoginPage = () => {
             required
             />
         </div>
+        <div className="text-right text-sm">
+            <Link
+                to="/auth/forgot-password"
+                className="text-muted-foreground hover:text-primary hover:underline underline-offset-4"
+            >
+                ¿Olvidaste tu contraseña?
+            </Link>
+        </div>
         <Button
             type="submit"
             className="w-full"
@@ -85,6 +93,8 @@ export const LoginPage = () => {
                 Registrate
             </Link>
       </div>
+
+      
     </form>
   )
 }
