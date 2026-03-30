@@ -16,7 +16,7 @@ class PeopleSeeder extends Seeder
                 'last_name' => fake()->lastName(),
                 'second_last_name' => fake()->lastName(),
                 'phone' => fake()->phoneNumber(),
-                'is_active' => fake()->boolean(80), // 80% activo
+                'is_active' => fake()->boolean(80), 
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
