@@ -9,7 +9,8 @@ class Apartment extends Model
     protected $fillable = [
         'name',
         'is_overdue',
-        'code'
+        'code',
+        'status'
     ];
 
     public function apartmentPeople()

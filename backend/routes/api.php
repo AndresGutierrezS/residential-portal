@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApartmentController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
@@ -38,8 +39,10 @@ Route::middleware('auth:sanctum')->group(function () {
     
 Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('cars', CarController::class);
-    });
     Route::apiResource('residents', ResidentController::class);
+    Route::apiResource('apartments', ApartmentController::class);
+});
+
     
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(

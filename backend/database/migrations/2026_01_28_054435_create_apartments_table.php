@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('is_overdue');
             $table->string('code');
+            $table->string('status');
             $table->timestamps();
         });
     }
