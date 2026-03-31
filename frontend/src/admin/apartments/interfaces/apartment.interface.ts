@@ -1,12 +1,12 @@
 type Status = 'Disponible' | 'Ocupado' | 'Mantenimiento';
 
 export interface Apartment {
-    id: number
-    name: string
-    code: string
-    floor: number
-    isOverdue: boolean
-    status: Status
+    id: number;
+    name: string;
+    code: string;
+    floor: number;
+    is_overdue: number;
+    status: Status;
 }
 
 export interface ApartmentResponse {
@@ -23,5 +23,5 @@ export interface ApartmentDTO {
     code: string;
     status: Status;
     name?: string;
-    is_overdue?: boolean
+    is_overdue?: number;
 }
