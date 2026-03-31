@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { useApartments } from "../apartments/hooks/useApartments";
 
 interface Unit {
   id: string;
@@ -26,6 +27,8 @@ export const UnitsPage = () => {
     { id: "3", number: "201", floor: "2", status: "occupied", owner: "María González", area: "95m²" },
     { id: "4", number: "202", floor: "2", status: "maintenance", owner: "", area: "95m²" },
   ]);
+
+  const {apartments} = useApartments();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
