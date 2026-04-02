@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Plus, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -9,84 +8,58 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { ApartmentCard } from "../apartments/components/ApartmentCard";
 import { useApartments } from "../apartments/hooks/useApartments";
+import type { Apartment, ApartmentDTO } from "../apartments/interfaces/apartment.interface";
 
-interface Unit {
-  id: string;
-  number: string;
-  floor: string;
-  status: "occupied" | "vacant" | "maintenance";
-  owner: string;
-  area: string;
-}
 
 export const UnitsPage = () => {
-  const [units, setUnits] = useState<Unit[]>([
-    { id: "1", number: "101", floor: "1", status: "occupied", owner: "Juan Pérez", area: "85m²" },
-    { id: "2", number: "102", floor: "1", status: "vacant", owner: "", area: "85m²" },
-    { id: "3", number: "201", floor: "2", status: "occupied", owner: "María González", area: "95m²" },
-    { id: "4", number: "202", floor: "2", status: "maintenance", owner: "", area: "95m²" },
-  ]);
+  
+  const { apartments, createApartment, deleteApartment, isError, isLoading, updateApartment } = useApartments();
 
-  const {apartments} = useApartments();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [editingUnit, setEditingUnit] = useState<Unit | null>(null);
-  const [deletingUnit, setDeletingUnit] = useState<Unit | null>(null);
-  const [formData, setFormData] = useState({ number: "", floor: "", status: "vacant" as Unit["status"], owner: "", area: "" });
+  const [editingUnit, setEditingUnit] = useState<Apartment | null>(null);
+  const [deletingUnit, setDeletingUnit] = useState<Apartment | null>(null);
+  const [formData, setFormData] = useState({ number: "", floor: "", status: "vacant", owner: "", area: "" });
 
-  const statusLabels = {
-    occupied: { label: "Ocupada", variant: "default" as const },
-    vacant: { label: "Disponible", variant: "secondary" as const },
-    maintenance: { label: "Mantenimiento", variant: "destructive" as const },
+  
+
+  const handleCreate = (payload: ApartmentDTO) => {
+    createApartment(payload, {
+      onSuccess: () => {
+        toast.success("Apartmento creado correctamente");
+        setIsDialogOpen(false);
+      },
+      onError: () => toast.error("Error al crear apartamento"),
+    });
   };
 
-  const handleAdd = () => {
-    setFormData({ number: "", floor: "", status: "vacant", owner: "", area: "" });
-    setEditingUnit(null);
-    setIsDialogOpen(true);
+  const handleUpdate = (data: ApartmentDTO) => {
+    if(!editingUnit) return;
+
+    updateApartment({
+      id: editingUnit.id,
+      data
+    }, {
+      onSuccess: () => {
+        toast.success("Apartamento actualizado");
+        setEditingUnit(null);
+      },
+      onError: () => toast.error("Error al actualizar el departamento"),
+    });
   };
 
-  const handleEdit = (unit: Unit) => {
-    setFormData(unit);
-    setEditingUnit(unit);
-    setIsDialogOpen(true);
+  const handleDelete = (id: number) => {
+    deleteApartment(id, {
+      onSuccess: () => {
+        toast.success("Departamento elimado correctamente");
+        setDeletingUnit(null);
+      },
+      onError: () => toast.error("Error al eliminar departamento")
+    })
   };
 
-  const handleDelete = (unit: Unit) => {
-    setDeletingUnit(unit);
-    setIsDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = () => {
-    if (deletingUnit) {
-      setUnits(units.filter((u) => u.id !== deletingUnit.id));
-      toast.success("Unidad eliminada correctamente");
-      setIsDeleteDialogOpen(false);
-      setDeletingUnit(null);
-    }
-  };
-
-  const handleSave = () => {
-    if (!formData.number || !formData.floor || !formData.area) {
-      toast.error("Por favor complete los campos requeridos");
-      return;
-    }
-
-    if (editingUnit) {
-      setUnits(units.map((u) => (u.id === editingUnit.id ? { ...u, ...formData } : u)));
-      toast.success("Unidad actualizada correctamente");
-    } else {
-      const newUnit: Unit = {
-        id: Date.now().toString(),
-        ...formData,
-      };
-      setUnits([...units, newUnit]);
-      toast.success("Unidad agregada correctamente");
-    }
-    setIsDialogOpen(false);
-  };
 
   return (
     <div className="space-y-6">
@@ -97,7 +70,7 @@ export const UnitsPage = () => {
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button onClick={handleAdd}>
+            <Button onClick={() => setIsDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Agregar Unidad
             </Button>
@@ -137,7 +110,7 @@ export const UnitsPage = () => {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="status">Estado</Label>
-                <Select value={formData.status} onValueChange={(value: Unit["status"]) => setFormData({ ...formData, status: value })}>
+                {/* <Select value={formData.status} onValueChange={(value: Unit["status"]) => setFormData({ ...formData, status: value })}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -146,7 +119,7 @@ export const UnitsPage = () => {
                     <SelectItem value="vacant">Disponible</SelectItem>
                     <SelectItem value="maintenance">Mantenimiento</SelectItem>
                   </SelectContent>
-                </Select>
+                </Select> */}
               </div>
               <div className="space-y-2">
                 <Label htmlFor="owner">Propietario</Label>
@@ -162,70 +135,42 @@ export const UnitsPage = () => {
               <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
                 Cancelar
               </Button>
-              <Button onClick={handleSave}>
+              {/* <Button onClick={handleSave}>
                 {editingUnit ? "Actualizar" : "Guardar"}
-              </Button>
+              </Button> */}
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {units.map((unit) => (
-          <Card key={unit.id}>
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-lg">Unidad {unit.number}</CardTitle>
-                  <CardDescription>Piso {unit.floor}</CardDescription>
-                </div>
-                <Badge variant={statusLabels[unit.status].variant}>
-                  {statusLabels[unit.status].label}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2 mb-4">
-                <div className="text-sm">
-                  <span className="text-gray-600">Área:</span>{" "}
-                  <span className="font-medium">{unit.area}</span>
-                </div>
-                {unit.owner && (
-                  <div className="text-sm">
-                    <span className="text-gray-600">Propietario:</span>{" "}
-                    <span className="font-medium">{unit.owner}</span>
-                  </div>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1" onClick={() => handleEdit(unit)}>
-                  <Edit className="h-3 w-3 mr-1" />
-                  Editar
-                </Button>
-                <Button variant="outline" size="sm" onClick={() => handleDelete(unit)}>
-                  <Trash2 className="h-3 w-3 text-red-600" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+        {apartments.map((apartment) => (
+          <ApartmentCard 
+            key={apartment.id}
+            apartment={apartment}
+            onDelete={() => handleDelete(apartment.id)}
+            onEdit={() => handleUpdate(apartment)}
+          />
         ))}
       </div>
 
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta acción no se puede deshacer. Se eliminará permanentemente la unidad{" "}
-              <strong>{deletingUnit?.number}</strong>.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>Eliminar</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+        {deletingUnit && (
+          <AlertDialog open onOpenChange={() => setDeletingUnit(null)}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Esta acción no se puede deshacer. Se eliminará permanentemente la unidad{" "}
+                  <strong>{deletingUnit?.code}</strong>.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                <AlertDialogAction onClick={() => handleDelete(deletingUnit.id)}>Eliminar</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
     </div>
   );
 }

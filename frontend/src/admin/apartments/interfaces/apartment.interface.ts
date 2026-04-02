@@ -1,4 +1,4 @@
-type Status = 'Disponible' | 'Ocupado' | 'Mantenimiento';
+type Status = 'occupied' | 'vacant' | 'maintenance';
 
 export interface Apartment {
     id: number;

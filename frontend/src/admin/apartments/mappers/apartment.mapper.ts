@@ -8,7 +8,7 @@ export const apartmentMap = (a: ApartmentResponse): Apartment => {
         code: a.code,
         name: a.name,
         is_overdue: a.is_overdue,
-        floor: Number(a.code.at(0)),
+        floor: Number(a.code[2]),
         status: a.status,
     }
 }
