@@ -41,9 +41,21 @@ export const UnitsPage = () => {
   const handleUpdate = (data: ApartmentDTO) => {
     if(!editingUnit) return;
 
+    const payload: ApartmentDTO = {
+      code: data.code,
+      status: data.status,
+    };
+
+    if (data.is_overdue !== undefined) {
+      payload.is_overdue = data.is_overdue;
+    }
+
+    if (data.name !== undefined) {
+      payload.name = data.name;
+    }
     updateApartment({
       id: editingUnit.id,
-      data
+      data: payload
     }, {
       onSuccess: () => {
         toast.success("Apartamento actualizado");

@@ -52,6 +52,13 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
         }
 
         onSubmit(dto);
+        setFormData({
+            code: "",
+            status: "vacant",
+            area: '',
+            floor: '',
+            owner: '',
+        })
     }
 
     return (

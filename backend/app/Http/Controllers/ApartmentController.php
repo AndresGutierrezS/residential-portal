@@ -54,23 +54,38 @@ class ApartmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request->validate([
-            'code' => 'sometimes|string', 
-            'is_overdue' => 'sometimes|boolean', 
-            'status' => 'sometimes|string', 
-        ]);
+        
+            $request->validate([
+                'code' => 'sometimes|string',
+                'name' => 'sometimes|string',
+                'is_overdue' => 'sometimes|boolean', 
+                'status' => 'sometimes|string', 
+            ]);
+    
+            $apartment = Apartment::findOrFail($id);
+        
+            try {
+                $data = $request->only(['code', 'status', 'is_overdue']);
 
-        $apartment = Apartment::findOrFail($id);
+                if ($request->has('code')) {
+                    $data['name'] = 'Apartamento ' . $request->code;
+                }
 
-        $apartment->update([
-            'code' => $request->code,
-            'name' => 'Apartamento ' . $request->code,
-            'is_overdue' => $request->is_overdue,
-            'status' => $request->status,
-        ]);
+                if ($request->has('name')) {
+                    $data['name'] = $request->name;
+                }
 
-        return response()->json($apartment, 200);
-    }
+                $apartment->update($data);
+
+                return response()->json($apartment, 200);
+
+            } catch (\Exception $e) {
+                return response()->json([
+                    'error' => $e->getMessage(),
+                    'line' => $e->getLine(),
+                ], 500);
+            }
+        }
 
     /**
      * Remove the specified resource from storage.
