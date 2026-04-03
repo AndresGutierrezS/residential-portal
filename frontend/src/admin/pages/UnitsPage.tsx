@@ -1,12 +1,6 @@
 import { useState } from "react";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
 import { ApartmentCard } from "../apartments/components/ApartmentCard";
 import { useApartments } from "../apartments/hooks/useApartments";
@@ -14,19 +8,16 @@ import type { Apartment, ApartmentDTO } from "../apartments/interfaces/apartment
 import { PageHeader } from "../components/PageHeader";
 import { ApartmentDialog } from "../apartments/components/ApartmentDialog";
 import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
+import { DeleteApartmentDialog } from "../apartments/components/DeleteApartmentDialog";
 
 
 export const UnitsPage = () => {
   
   const { apartments, createApartment, deleteApartment, isLoading, updateApartment } = useApartments();
 
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingUnit, setEditingUnit] = useState<Apartment | null>(null);
   const [deletingUnit, setDeletingUnit] = useState<Apartment | null>(null);
-  
-
-  
 
   const handleCreate = (payload: ApartmentDTO) => {
     createApartment(payload, {
@@ -95,7 +86,7 @@ export const UnitsPage = () => {
           <ApartmentCard 
             key={apartment.id}
             apartment={apartment}
-            onDelete={() => handleDelete(apartment.id)}
+            onDelete={() => setDeletingUnit(apartment)}
             onEdit={() => setEditingUnit(apartment)}
           />
         ))}
@@ -116,23 +107,12 @@ export const UnitsPage = () => {
         />
       )}
 
-        {deletingUnit && (
-          <AlertDialog open onOpenChange={() => setDeletingUnit(null)}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>¿Está seguro?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Esta acción no se puede deshacer. Se eliminará permanentemente la unidad{" "}
-                  <strong>{deletingUnit?.code}</strong>.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                <AlertDialogAction onClick={() => handleDelete(deletingUnit.id)}>Eliminar</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-        )}
+      <DeleteApartmentDialog 
+        apartment={deletingUnit}
+        onClose={() => setDeletingUnit(null)}
+        onConfirm={(id) => handleDelete(id)}
+      />
+
     </div>
   );
 }
