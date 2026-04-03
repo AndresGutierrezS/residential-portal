@@ -25,3 +25,11 @@ export interface ApartmentDTO {
     name?: string;
     is_overdue?: number;
 }
+
+export interface ApartmentForm {
+    code: string;
+    status: Status;
+    area?: string;
+    floor?: string;
+    owner?: string;
+}

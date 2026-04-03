@@ -11,17 +11,20 @@ import { toast } from "sonner";
 import { ApartmentCard } from "../apartments/components/ApartmentCard";
 import { useApartments } from "../apartments/hooks/useApartments";
 import type { Apartment, ApartmentDTO } from "../apartments/interfaces/apartment.interface";
+import { PageHeader } from "../components/PageHeader";
+import { ApartmentDialog } from "../apartments/components/ApartmentDialog";
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
 
 
 export const UnitsPage = () => {
   
-  const { apartments, createApartment, deleteApartment, isError, isLoading, updateApartment } = useApartments();
+  const { apartments, createApartment, deleteApartment, isLoading, updateApartment } = useApartments();
 
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingUnit, setEditingUnit] = useState<Apartment | null>(null);
   const [deletingUnit, setDeletingUnit] = useState<Apartment | null>(null);
-  const [formData, setFormData] = useState({ number: "", floor: "", status: "vacant", owner: "", area: "" });
+  
 
   
 
@@ -63,96 +66,43 @@ export const UnitsPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Unidades</h1>
-          <p className="text-gray-600 mt-1">Gestión de unidades del condominio</p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
+      <PageHeader 
+        title="Unidades"
+        description="Gestión de unidades del condominio"
+        action={
             <Button onClick={() => setIsDialogOpen(true)}>
               <Plus className="h-4 w-4 mr-2" />
               Agregar Unidad
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editingUnit ? "Editar Unidad" : "Nueva Unidad"}</DialogTitle>
-              <DialogDescription>Complete los datos de la unidad</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="number">Número</Label>
-                <Input
-                  id="number"
-                  value={formData.number}
-                  onChange={(e) => setFormData({ ...formData, number: e.target.value })}
-                  placeholder="101"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="floor">Piso</Label>
-                <Input
-                  id="floor"
-                  value={formData.floor}
-                  onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
-                  placeholder="1"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="area">Área</Label>
-                <Input
-                  id="area"
-                  value={formData.area}
-                  onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                  placeholder="85m²"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="status">Estado</Label>
-                {/* <Select value={formData.status} onValueChange={(value: Unit["status"]) => setFormData({ ...formData, status: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="occupied">Ocupada</SelectItem>
-                    <SelectItem value="vacant">Disponible</SelectItem>
-                    <SelectItem value="maintenance">Mantenimiento</SelectItem>
-                  </SelectContent>
-                </Select> */}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="owner">Propietario</Label>
-                <Input
-                  id="owner"
-                  value={formData.owner}
-                  onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
-                  placeholder="Nombre del propietario"
-                />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancelar
-              </Button>
-              {/* <Button onClick={handleSave}>
-                {editingUnit ? "Actualizar" : "Guardar"}
-              </Button> */}
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+        }
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {isLoading && <LoadingSpinner show/>}
         {apartments.map((apartment) => (
           <ApartmentCard 
             key={apartment.id}
             apartment={apartment}
             onDelete={() => handleDelete(apartment.id)}
-            onEdit={() => handleUpdate(apartment)}
+            onEdit={() => setEditingUnit(apartment)}
           />
         ))}
       </div>
+
+      <ApartmentDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onSubmit={handleCreate}
+      />
+
+      {editingUnit && (
+        <ApartmentDialog
+          open={true}
+          onOpenChange={() => setEditingUnit(null)}
+          initialData={editingUnit}
+          onSubmit={handleUpdate}
+        />
+      )}
 
         {deletingUnit && (
           <AlertDialog open onOpenChange={() => setDeletingUnit(null)}>
