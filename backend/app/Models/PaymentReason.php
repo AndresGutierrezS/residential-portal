@@ -14,4 +14,9 @@ class PaymentReason extends Model
     {
         return $this->hasMany(Payment::class);
     }
+
+    public function type()
+    {
+        return $this->belongsTo(PaymentType::class, 'payment_type_id');
+    } 
 }
