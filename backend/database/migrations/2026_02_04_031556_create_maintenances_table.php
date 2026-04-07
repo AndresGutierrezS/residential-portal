@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->integer('month');
             $table->integer('year');
-            $table->foreignId('apartment_id')->constrained()->onDelete('cascade');
             $table->boolean('is_completed');
             $table->decimal('amount');
             $table->foreignId('payment_id')->constrained()->onDelete('cascade');

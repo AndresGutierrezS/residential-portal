@@ -10,10 +10,10 @@ class PaymentReason extends Model
         'reason'
     ];
 
-    public function payments()
-    {
-        return $this->hasMany(Payment::class);
-    }
+    // public function payments()
+    // {
+    //     return $this->hasMany(Payment::class);
+    // }
 
     public function type()
     {
