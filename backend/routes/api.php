@@ -8,6 +8,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EmailVerificationController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ResidentController;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,10 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('residents', ResidentController::class);
     Route::apiResource('apartments', ApartmentController::class);
 });
+
+Route::apiResource('payments', PaymentController::class);
+Route::get('payment-types', [PaymentController::class, 'getTypes']);
+Route::get('payment-reasons', [PaymentController::class, 'getReasons']);
 
     
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
