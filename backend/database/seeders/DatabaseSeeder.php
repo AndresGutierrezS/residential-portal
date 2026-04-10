@@ -21,6 +21,8 @@ class DatabaseSeeder extends Seeder
             ApartmentsSeeder::class,
             PaymentTypeSeeder::class,
             PaymentReasonSeeder::class,
+            ReportsSeeder::class,
+            PaymentSeeder::class
         ]);
     }
 }
