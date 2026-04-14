@@ -13,7 +13,7 @@ export const createPaymentAction = async (payload: CreatePaymentDTO): Promise<Pa
     return data;
 }
 
-export const updatePaymentAction = async (payload: CreatePaymentDTO, id: number): Promise<PaymentResponse> => {
+export const updatePaymentAction = async (id: number, payload: CreatePaymentDTO ): Promise<PaymentResponse> => {
     const { data } = await portalGateApi.put<PaymentResponse>(`payments/${id}`, payload);
     return data;
 }
