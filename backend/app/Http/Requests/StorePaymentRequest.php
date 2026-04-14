@@ -30,7 +30,7 @@ class StorePaymentRequest extends FormRequest
             'description' => 'required|string',
             'receipt' => 'required|string',
             'is_paid' => 'required|boolean',
-            'report_id' => 'required|exists:reports,id',
+            'report_id' => 'nullable|exists:reports,id',
 
             'month' => 'nullable|integer|min:1|max:12',
             'year' => 'nullable|integer|min:2000',

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('description');
             $table->string('receipt');
             $table->boolean('is_paid');
-            $table->foreignId('report_id')->constrained()->onDelete('cascade');
+            $table->foreignId('report_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
