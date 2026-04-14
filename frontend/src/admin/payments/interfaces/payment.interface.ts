@@ -87,3 +87,17 @@ export interface Payment {
         completed: boolean;
     };
 }
+
+export interface CreatePaymentDTO {
+    apartment_id: number;
+    amount: number;
+    payment_type_id: number;
+    payment_reason_id: number;
+    date: string;
+    description: string;
+    receipt: string;
+    is_paid: boolean;
+    report_id?: number;
+    month?: number;
+    year?: number;
+}
