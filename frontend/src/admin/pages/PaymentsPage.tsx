@@ -9,6 +9,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { PaymentsSummary } from "../payments/components/PaymentsSummary";
+import { PaymentsTable } from "../payments/components/PaymentsTable";
 
 interface Payment {
   id: string;
@@ -147,82 +149,16 @@ export const PaymentsPage = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Pagado</CardTitle>
-            <DollarSign className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">${totalPaid.toLocaleString()}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Pendiente</CardTitle>
-            <DollarSign className="h-4 w-4 text-orange-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-600">${totalPending.toLocaleString()}</div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Pagos</CardTitle>
-            <DollarSign className="h-4 w-4 text-blue-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{payments.length}</div>
-          </CardContent>
-        </Card>
-      </div>
+      <PaymentsSummary 
+        totalPaid={totalPaid}
+        totalPayments={payments.length}
+        totalPending={totalPending}
+      />
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Historial de Pagos</CardTitle>
-          <CardDescription>Registro de todos los pagos del condominio</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Unidad</TableHead>
-                <TableHead>Mes</TableHead>
-                <TableHead>Monto</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Fecha de Pago</TableHead>
-                <TableHead className="text-right">Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {payments.map((payment) => (
-                <TableRow key={payment.id}>
-                  <TableCell className="font-medium">Unidad {payment.unit}</TableCell>
-                  <TableCell>{payment.month}</TableCell>
-                  <TableCell>${payment.amount.toLocaleString()}</TableCell>
-                  <TableCell>
-                    <Badge variant={statusLabels[payment.status].variant}>
-                      {statusLabels[payment.status].label}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{payment.date || "-"}</TableCell>
-                  <TableCell className="text-right">
-                    {payment.status !== "paid" && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleMarkAsPaid(payment.id)}
-                      >
-                        Marcar como Pagado
-                      </Button>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <PaymentsTable 
+        payments={payments}
+      />
+
     </div>
   );
 }
