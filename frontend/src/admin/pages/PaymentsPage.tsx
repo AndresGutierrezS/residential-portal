@@ -11,6 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { PaymentsSummary } from "../payments/components/PaymentsSummary";
 import { PaymentsTable } from "../payments/components/PaymentsTable";
+import { PageHeader } from "../components/PageHeader";
+import { usePayments } from "../payments/hooks/usePayments";
+import { PaymentFormDialog } from "../payments/components/PaymentFormDialog";
 
 interface Payment {
   id: string;
@@ -29,8 +32,12 @@ export const PaymentsPage = () => {
     { id: "4", unit: "202", amount: 950, month: "Enero 2026", status: "overdue" },
   ]);
 
+  const { payments: payments2, createPayment, deletePayment, reasons, types, updatePayment, isError, isLoading } = usePayments();
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [formData, setFormData] = useState({ unit: "", amount: "", month: "", status: "pending" as Payment["status"] });
+
+  const [typeId, setTypeId] = useState<number | undefined>();
 
   const statusLabels = {
     paid: { label: "Pagado", variant: "default" as const },
@@ -76,77 +83,30 @@ export const PaymentsPage = () => {
     toast.success("Pago marcado como pagado");
   };
 
+
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Pagos</h1>
-          <p className="text-gray-600 mt-1">Gestión de pagos del condominio</p>
-        </div>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={handleAdd}>
-              <Plus className="h-4 w-4 mr-2" />
+      
+      
+      <PageHeader 
+        title="Pagos"
+        description="Gestión de pagos del condominio"
+        action={
+        <Button onClick={() => setIsDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
               Registrar Pago
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Registrar Pago</DialogTitle>
-              <DialogDescription>Complete los datos del pago</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="unit">Unidad</Label>
-                <Input
-                  id="unit"
-                  value={formData.unit}
-                  onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                  placeholder="101"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="amount">Monto</Label>
-                <Input
-                  id="amount"
-                  type="number"
-                  value={formData.amount}
-                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  placeholder="850"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="month">Mes</Label>
-                <Input
-                  id="month"
-                  value={formData.month}
-                  onChange={(e) => setFormData({ ...formData, month: e.target.value })}
-                  placeholder="Enero 2026"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="status">Estado</Label>
-                <Select value={formData.status} onValueChange={(value: Payment["status"]) => setFormData({ ...formData, status: value })}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="paid">Pagado</SelectItem>
-                    <SelectItem value="pending">Pendiente</SelectItem>
-                    <SelectItem value="overdue">Vencido</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                Cancelar
-              </Button>
-              <Button onClick={handleSave}>Guardar</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </div>
+        </Button>
+        }
+      />
+
+     <PaymentFormDialog 
+      isOpen={isDialogOpen}
+      onClose={() => setIsDialogOpen(false)}
+      onSubmit={createPayment}
+      types={types}
+      reasons={reasons}
+      onTypeChange={setTypeId}
+     />
 
       {/* Summary Cards */}
       <PaymentsSummary 
@@ -156,7 +116,7 @@ export const PaymentsPage = () => {
       />
 
       <PaymentsTable 
-        payments={payments}
+        payments={payments2}
       />
 
     </div>

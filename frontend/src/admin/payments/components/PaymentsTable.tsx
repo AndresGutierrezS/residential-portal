@@ -2,30 +2,15 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import type { Payment } from "../interfaces/payment.interface";
 
-interface Payment {
-  id: string;
-  unit: string;
-  amount: number;
-  month: string;
-  status: "paid" | "pending" | "overdue";
-  date?: string;
-}
 
 interface Props {
     payments: Payment[];
 }
 
 export const PaymentsTable = ({ payments }: Props) => {
-  
-    const statusLabels = {
-        paid: { label: "Pagado", variant: "default" as const },
-        pending: { label: "Pendiente", variant: "secondary" as const },
-        overdue: { label: "Vencido", variant: "destructive" as const },
-    };
-
     
-
     return (
         <Card>
             <CardHeader>
@@ -47,17 +32,17 @@ export const PaymentsTable = ({ payments }: Props) => {
                 <TableBody>
                 {payments.map((payment) => (
                     <TableRow key={payment.id}>
-                    <TableCell className="font-medium">Unidad {payment.unit}</TableCell>
-                    <TableCell>{payment.month}</TableCell>
+                    <TableCell className="font-medium">{payment.apartment?.name}</TableCell>
+                    <TableCell>{payment.date.getMonth()}</TableCell>
                     <TableCell>${payment.amount.toLocaleString()}</TableCell>
                     <TableCell>
-                        <Badge variant={statusLabels[payment.status].variant}>
-                        {statusLabels[payment.status].label}
+                        <Badge variant={payment.isPaid ? 'default' : 'secondary'}>
+                        {payment.isPaid ? 'Pagado' : 'Pendiente'}
                         </Badge>
                     </TableCell>
-                    <TableCell>{payment.date || "-"}</TableCell>
+                    <TableCell>{payment.date.getDate() || "-"}</TableCell>
                     <TableCell className="text-right">
-                        {payment.status !== "paid" && (
+                        {!payment.isPaid && (
                         <Button
                             variant="outline"
                             size="sm"
