@@ -42,3 +42,8 @@ export const getTypesAction = async (): Promise<PaymentType[]> => {
     const { data } = await portalGateApi.get<PaymentType[]>('payment-types');
     return data;
 }
+
+export const markAsPaidAction = async (id: number): Promise<Payment> => {
+    const { data } = await portalGateApi.patch<Payment>(`payments/${id}/mark-as-paid`);
+    return data;
+}

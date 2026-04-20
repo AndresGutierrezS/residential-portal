@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { createPaymentAction, deletePaymentAction, getPaymentsAction, getReasonsAction, getTypesAction, updatePaymentAction } from "../actions/payment.actions";
+import { createPaymentAction, deletePaymentAction, getPaymentsAction, getReasonsAction, getTypesAction, markAsPaidAction, updatePaymentAction } from "../actions/payment.actions";
 import type { CreatePaymentDTO } from "../interfaces/payment.interface";
 
 
@@ -52,6 +52,13 @@ export const usePayments = (typeId?: number) => {
         }
     })
 
+    const markAsPaidMutation = useMutation({
+        mutationFn: markAsPaidAction,
+        onSuccess: () => {
+            queryClient.invalidateQueries({queryKey: ['payments']})
+        }
+    })
+
     return {
         payments: paymentsQuery.data ?? [],
         types: typesQuery.data ?? [],
@@ -59,9 +66,11 @@ export const usePayments = (typeId?: number) => {
 
         isLoading: paymentsQuery.isLoading,
         isError: paymentsQuery.isError,
+        isPaymentLoading: markAsPaidMutation.isPending,
 
         createPayment: createMutation.mutate,
         updatePayment: updateMutation.mutate,
         deletePayment: deleteMutation.mutate,
+        markAsPaid: markAsPaidMutation.mutate,
     }
 }

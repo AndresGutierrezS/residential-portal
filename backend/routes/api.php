@@ -42,12 +42,12 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('cars', CarController::class);
     Route::apiResource('residents', ResidentController::class);
     Route::apiResource('apartments', ApartmentController::class);
+    
+    Route::apiResource('payments', PaymentController::class);
+    Route::get('payment-types', [PaymentController::class, 'getTypes']);
+    Route::get('payment-reasons', [PaymentController::class, 'getReasons']);
+    Route::patch('payments/{id}/mark-as-paid', [PaymentController::class, 'markAsPaid']);
 });
-
-Route::apiResource('payments', PaymentController::class);
-Route::get('payment-types', [PaymentController::class, 'getTypes']);
-Route::get('payment-reasons', [PaymentController::class, 'getReasons']);
-
     
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(

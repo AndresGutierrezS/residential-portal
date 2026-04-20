@@ -118,4 +118,14 @@ class PaymentController extends Controller
     {
         return PaymentReason::where('payment_type_id', $request->payment_type_id)->get();
     }
+
+    public function markAsPaid($id)
+    {
+        $payment = Payment::findOrFail($id);
+
+        $payment->is_paid = true;
+        $payment->save();
+
+        return response()->json($payment);
+    }
 }

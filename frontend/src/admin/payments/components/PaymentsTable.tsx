@@ -3,13 +3,18 @@ import { Button } from "@/components/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import type { Payment } from "../interfaces/payment.interface";
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
 
 
 interface Props {
     payments: Payment[];
+    isError: boolean,
+    isLoading: boolean,
+    onDelete: (id: number) => void;
+    onMarkAsPaid: (id: number) => void;
 }
 
-export const PaymentsTable = ({ payments }: Props) => {
+export const PaymentsTable = ({ payments, isLoading, onDelete, onMarkAsPaid }: Props) => {
     
     return (
         <Card>
@@ -18,6 +23,9 @@ export const PaymentsTable = ({ payments }: Props) => {
             <CardDescription>Registro de todos los pagos del condominio</CardDescription>
             </CardHeader>
             <CardContent>
+            {isLoading && (
+                <LoadingSpinner show/>
+            )}
             <Table>
                 <TableHeader>
                 <TableRow>
@@ -46,7 +54,7 @@ export const PaymentsTable = ({ payments }: Props) => {
                         <Button
                             variant="outline"
                             size="sm"
-                            //onClick={() => handleMarkAsPaid(payment.id)}
+                            onClick={() => onMarkAsPaid(payment.id)}
                         >
                             Marcar como Pagado
                         </Button>
