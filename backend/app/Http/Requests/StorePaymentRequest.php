@@ -11,7 +11,7 @@ class StorePaymentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -35,5 +35,20 @@ class StorePaymentRequest extends FormRequest
             'month' => 'nullable|integer|min:1|max:12',
             'year' => 'nullable|integer|min:2000',
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $typeId = $this->input('payment_type_id');
+
+            $type = \App\Models\PaymentType::find($typeId);
+
+            if ($type && $type->type === 'Maintenance') {
+                if (!$this->input('month') || !$this->input('year')) {
+                    $validator->errors()->add('month', 'Month and year are required for maintenance.');
+                }
+            }
+        });
     }
 }

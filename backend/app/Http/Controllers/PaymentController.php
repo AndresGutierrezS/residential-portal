@@ -47,14 +47,19 @@ class PaymentController extends Controller
         // si es mantenimiento
         $type = PaymentType::find($data['payment_type_id']);
 
+        
         if ($type && $type->type === 'Maintenance') {
+            try {
             Maintenance::create([
                 'payment_id' => $payment->id,
-                'month' => $data['month'],
-                'year' => $data['year'],
+                'month' => $data['month'] ?? null,
+                'year' => $data['year'] ?? null,
                 'amount' => $payment->amount,
-                'completed' => $payment->is_paid,
+                'is_completed' => $payment->is_paid,
             ]);
+            } catch (\Exception $e) {
+                dd($e->getMessage());
+            }
         }
 
         return response()->json($payment->load([
@@ -62,6 +67,7 @@ class PaymentController extends Controller
             'paymentReason',
             'maintenance'
         ]), 201);
+
     }
 
     /**

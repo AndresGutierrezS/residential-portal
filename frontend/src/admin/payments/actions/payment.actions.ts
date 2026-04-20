@@ -9,8 +9,12 @@ export const getPaymentsAction = async (): Promise<Payment[]> => {
 }
 
 export const createPaymentAction = async (payload: CreatePaymentDTO): Promise<PaymentResponse> => {
-    const { data } = await portalGateApi.post<PaymentResponse>('payments', payload);
-    return data;
+    try {
+        const { data } = await portalGateApi.post<PaymentResponse>('payments', payload);
+        return data;
+    } catch (error) {
+        throw error;
+    }
 }
 
 export const updatePaymentAction = async (id: number, payload: CreatePaymentDTO ): Promise<PaymentResponse> => {

@@ -57,11 +57,12 @@ export const PaymentFormDialog = ({
             payment_reason_id: Number(formData.payment_reason_id),
             date: formData.date,
             description: formData.description,
-            receipt: formData.receipt,
+            receipt: formData.receipt ?? undefined,
             is_paid: formData.is_paid,
             month: formData.month ? Number(formData.month) : undefined,
             year: formData.year ? Number(formData.year) : undefined,
         };
+        console.log(payload);
 
         onSubmit(payload);
         onClose();

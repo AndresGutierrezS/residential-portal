@@ -12,14 +12,14 @@ export const PaymentsPage = () => {
 
   const [typeId, setTypeId] = useState<number | undefined>();
   
-  const { payments, createPayment, deletePayment, reasons, types, markAsPaid, isPaymentLoading, isError, isLoading } = usePayments( typeId );
+  const { payments, createPayment, deletePayment, reasons, types, markAsPaid, isError, isLoading } = usePayments( typeId );
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
 
 
   const totalPaid = payments.filter((p) => p.isPaid).reduce((sum, p) => sum + p.amount, 0);
-  const totalPending = payments.filter((p) => p.isPaid).reduce((sum, p) => sum + p.amount, 0);
+  const totalPending = payments.filter((p) => !p.isPaid).reduce((sum, p) => sum + p.amount, 0);
 
 
   return (
