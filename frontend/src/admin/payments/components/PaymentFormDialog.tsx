@@ -1,10 +1,15 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { SelectTrigger, SelectValue, SelectContent, SelectItem, Select } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+
 import type { PaymentType, PaymentReason, CreatePaymentDTO } from "../interfaces/payment.interface";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 interface Props {
     isOpen: boolean;
@@ -17,6 +22,28 @@ interface Props {
     onTypeChange: (typeId: number) => void;
 }
 
+const formSchema = z.object({
+    apartment_id: z.string().min(1, "El departamento es requerido"),
+    amount: z.string().min(1, "El monto es requerido"),
+    payment_type_id: z.string().min(1, "Selecciona un tipo"),
+    payment_reason_id: z.string().min(1, "Selecciona un motivo"),
+    date: z.string().min(1, "La fecha es requerida"),
+    description: z.string().optional(),
+    receipt: z.string().optional(),
+    is_paid: z.boolean(),
+
+    month: z.string().optional(),
+    year: z.string().optional(),
+}).refine((data) => {
+    if (data.payment_type_id === "1") {
+        return data.month && data.year;
+    }
+    return true;
+}, {
+    message: "Mes y año son requeridos para mantenimiento",
+    path: ["month"]
+});
+
 export const PaymentFormDialog = ({
     isOpen,
     onClose,
@@ -26,43 +53,41 @@ export const PaymentFormDialog = ({
     onTypeChange
 }: Props) => {
 
-    const [formData, setFormData] = useState({
-        apartment_id: "",
-        amount: "",
-        payment_type_id: "",
-        payment_reason_id: "",
-        date: "",
-        description: "",
-        receipt: "",
-        is_paid: false,
-        month: "",
-        year: ""
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        watch,
+        reset,
+        formState: { errors }
+    } = useForm({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            is_paid: false
+        }
     });
 
-    const handleSave = () => {
-        if (
-            !formData.apartment_id ||
-            !formData.amount ||
-            !formData.payment_type_id ||
-            !formData.payment_reason_id ||
-            !formData.date
-        ) {
-            return;
-        }
+    const selectedType = watch("payment_type_id");
 
+    useEffect(() => {
+        if (!isOpen) {
+            reset();
+        }
+    }, [isOpen, reset]);
+
+    const onSubmitForm = (data: any) => {
         const payload: CreatePaymentDTO = {
-            apartment_id: Number(formData.apartment_id),
-            amount: Number(formData.amount),
-            payment_type_id: Number(formData.payment_type_id),
-            payment_reason_id: Number(formData.payment_reason_id),
-            date: formData.date,
-            description: formData.description,
-            receipt: formData.receipt ?? undefined,
-            is_paid: formData.is_paid,
-            month: formData.month ? Number(formData.month) : undefined,
-            year: formData.year ? Number(formData.year) : undefined,
+            apartment_id: Number(data.apartment_id),
+            amount: Number(data.amount),
+            payment_type_id: Number(data.payment_type_id),
+            payment_reason_id: Number(data.payment_reason_id),
+            date: data.date,
+            description: data.description,
+            receipt: data.receipt,
+            is_paid: data.is_paid,
+            month: data.month ? Number(data.month) : undefined,
+            year: data.year ? Number(data.year) : undefined,
         };
-        console.log(payload);
 
         onSubmit(payload);
         onClose();
@@ -73,37 +98,39 @@ export const PaymentFormDialog = ({
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Registrar Pago</DialogTitle>
-                    <DialogDescription>Complete los datos del pago</DialogDescription>
+                    <DialogDescription>
+                        Complete los datos del pago
+                    </DialogDescription>
                 </DialogHeader>
 
                 <div className="space-y-4 py-4">
 
-                    {/* Unidad */}
                     <div className="space-y-2">
                         <Label>Departamento (ID)</Label>
-                        <Input
-                            value={formData.apartment_id}
-                            onChange={(e) => setFormData({ ...formData, apartment_id: e.target.value })}
-                            placeholder="1"
-                        />
+                        <Input {...register("apartment_id")} />
+                        {errors.apartment_id && (
+                            <p className="text-red-500 text-sm">
+                                {errors.apartment_id.message}
+                            </p>
+                        )}
                     </div>
 
-                    {/* Monto */}
                     <div className="space-y-2">
                         <Label>Monto</Label>
-                        <Input
-                            type="number"
-                            value={formData.amount}
-                            onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                        />
+                        <Input type="number" {...register("amount")} />
+                        {errors.amount && (
+                            <p className="text-red-500 text-sm">
+                                {errors.amount.message}
+                            </p>
+                        )}
                     </div>
 
-                    {/* Tipo */}
                     <div className="space-y-2">
                         <Label>Tipo de pago</Label>
                         <Select
                             onValueChange={(value) => {
-                                setFormData({ ...formData, payment_type_id: value, payment_reason_id: "" });
+                                setValue("payment_type_id", value);
+                                setValue("payment_reason_id", "");
                                 onTypeChange(Number(value));
                             }}
                         >
@@ -118,14 +145,18 @@ export const PaymentFormDialog = ({
                                 ))}
                             </SelectContent>
                         </Select>
+                        {errors.payment_type_id && (
+                            <p className="text-red-500 text-sm">
+                                {errors.payment_type_id.message}
+                            </p>
+                        )}
                     </div>
 
-                    {/* Razón */}
                     <div className="space-y-2">
                         <Label>Motivo</Label>
                         <Select
                             onValueChange={(value) =>
-                                setFormData({ ...formData, payment_reason_id: value })
+                                setValue("payment_reason_id", value)
                             }
                         >
                             <SelectTrigger>
@@ -139,42 +170,38 @@ export const PaymentFormDialog = ({
                                 ))}
                             </SelectContent>
                         </Select>
+                        {errors.payment_reason_id && (
+                            <p className="text-red-500 text-sm">
+                                {errors.payment_reason_id.message}
+                            </p>
+                        )}
                     </div>
 
-                    {/* Fecha */}
                     <div className="space-y-2">
                         <Label>Fecha</Label>
-                        <Input
-                            type="date"
-                            value={formData.date}
-                            onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                        />
+                        <Input type="date" {...register("date")} />
+                        {errors.date && (
+                            <p className="text-red-500 text-sm">
+                                {errors.date.message}
+                            </p>
+                        )}
                     </div>
 
-                    {/* Descripción */}
                     <div className="space-y-2">
                         <Label>Descripción</Label>
-                        <Input
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                        />
+                        <Input {...register("description")} />
                     </div>
 
-                    {/* Receipt */}
                     <div className="space-y-2">
                         <Label>Recibo</Label>
-                        <Input
-                            value={formData.receipt}
-                            onChange={(e) => setFormData({ ...formData, receipt: e.target.value })}
-                        />
+                        <Input {...register("receipt")} />
                     </div>
 
-                    {/* Estado */}
                     <div className="space-y-2">
                         <Label>Estado</Label>
                         <Select
                             onValueChange={(value) =>
-                                setFormData({ ...formData, is_paid: value === "paid" })
+                                setValue("is_paid", value === "paid")
                             }
                         >
                             <SelectTrigger>
@@ -187,24 +214,24 @@ export const PaymentFormDialog = ({
                         </Select>
                     </div>
 
-                    {/* Maintenance (opcional) */}
-                    <div className="space-y-2">
-                        <Label>Mes (solo mantenimiento)</Label>
-                        <Input
-                            type="number"
-                            value={formData.month}
-                            onChange={(e) => setFormData({ ...formData, month: e.target.value })}
-                        />
-                    </div>
+                    {selectedType === "1" && (
+                        <>
+                            <div className="space-y-2">
+                                <Label>Mes</Label>
+                                <Input type="number" {...register("month")} />
+                                {errors.month && (
+                                    <p className="text-red-500 text-sm">
+                                        {errors.month.message}
+                                    </p>
+                                )}
+                            </div>
 
-                    <div className="space-y-2">
-                        <Label>Año (solo mantenimiento)</Label>
-                        <Input
-                            type="number"
-                            value={formData.year}
-                            onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-                        />
-                    </div>
+                            <div className="space-y-2">
+                                <Label>Año</Label>
+                                <Input type="number" {...register("year")} />
+                            </div>
+                        </>
+                    )}
 
                 </div>
 
@@ -212,7 +239,7 @@ export const PaymentFormDialog = ({
                     <Button variant="outline" onClick={onClose}>
                         Cancelar
                     </Button>
-                    <Button onClick={handleSave}>
+                    <Button onClick={handleSubmit(onSubmitForm)}>
                         Guardar
                     </Button>
                 </DialogFooter>
