@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
@@ -48,6 +49,8 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::get('payment-reasons', [PaymentController::class, 'getReasons']);
     Route::patch('payments/{id}/mark-as-paid', [PaymentController::class, 'markAsPaid']);
 });
+
+Route::apiResource('expenses', ExpenseController::class);
     
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(

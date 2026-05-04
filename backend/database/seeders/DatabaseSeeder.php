@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             PaymentTypeSeeder::class,
             PaymentReasonSeeder::class,
             ReportsSeeder::class,
-            PaymentSeeder::class
+            PaymentSeeder::class,
+            ExpenseSeeder::class
         ]);
     }
 }

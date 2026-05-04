@@ -10,5 +10,9 @@ class Expense extends Model
         'amount',
         'description',
         'date',
+        'category',
+        'supplier',
+        'metod',
+        'state',
     ];
 }
