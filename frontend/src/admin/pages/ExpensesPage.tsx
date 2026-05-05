@@ -40,6 +40,8 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { PageHeader } from "../components/PageHeader";
+import { ExpensesStats } from "../expenses/components/ExpensesStats";
 
 interface Expense {
   id: string;
@@ -201,19 +203,22 @@ export const ExpensesPage = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gastos</h1>
-          <p className="text-gray-600 mt-1">Control de gastos del condominio</p>
-        </div>
-        <Button onClick={() => setIsAddDialogOpen(true)}>
-          <Plus className="h-4 w-4 mr-2" />
-          Nuevo Gasto
-        </Button>
-      </div>
+
+      <PageHeader 
+        title="Gastos"
+        description="Control de gastos del condominio"
+        action=
+        {
+          <Button onClick={() => setIsAddDialogOpen(true)}>
+            <Plus className="h-4 w-4 mr-2" />
+            Nuevo Gasto
+          </Button>
+        }
+      />
+
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Gastos</CardTitle>
@@ -244,7 +249,13 @@ export const ExpensesPage = () => {
             <p className="text-xs text-gray-600 mt-1">{expenses.filter((e) => e.status === "pending").length} gastos</p>
           </CardContent>
         </Card>
-      </div>
+      </div> */}
+
+      <ExpensesStats 
+        paidExpenses={paidExpenses}
+        pendingExpenses={pendingExpenses}
+        totalExpenses={totalExpenses}
+      />
 
       {/* Search */}
       <div className="relative">
