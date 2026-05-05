@@ -5,10 +5,11 @@ interface Props {
     totalExpenses: number,
     paidExpenses: number,
     pendingExpenses: number,
-    
+    paidCount: number,
+    pendingCount: number,
 }
 
-export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses}:Props) => {
+export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses, paidCount, pendingCount}:Props) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
@@ -28,7 +29,7 @@ export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses}:Pr
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold text-green-600">${paidExpenses.toLocaleString()}</div>
-                    {/* <p className="text-xs text-gray-600 mt-1">{expenses.filter((e) => e.status === "paid").length} gastos</p> */}
+                    <p className="text-xs text-gray-600 mt-1">{paidCount} gastos</p>
                 </CardContent>
                 </Card>
                 <Card>
@@ -38,7 +39,7 @@ export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses}:Pr
                 </CardHeader>
                 <CardContent>
                     <div className="text-2xl font-bold text-orange-600">${pendingExpenses.toLocaleString()}</div>
-                    {/* <p className="text-xs text-gray-600 mt-1">{expenses.filter((e) => e.status === "pending").length} gastos</p> */}
+                    <p className="text-xs text-gray-600 mt-1">{pendingCount} gastos</p>
                 </CardContent>
             </Card>
         </div>

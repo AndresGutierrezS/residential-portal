@@ -42,6 +42,7 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { PageHeader } from "../components/PageHeader";
 import { ExpensesStats } from "../expenses/components/ExpensesStats";
+import { ExpensesSearch } from "../expenses/components/ExpensesSearch";
 
 interface Expense {
   id: string;
@@ -218,55 +219,19 @@ export const ExpensesPage = () => {
 
 
       {/* Stats */}
-      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Gastos</CardTitle>
-            <DollarSign className="h-4 w-4 text-gray-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">${totalExpenses.toLocaleString()}</div>
-            <p className="text-xs text-gray-600 mt-1">Este mes</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pagados</CardTitle>
-            <TrendingDown className="h-4 w-4 text-green-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">${paidExpenses.toLocaleString()}</div>
-            <p className="text-xs text-gray-600 mt-1">{expenses.filter((e) => e.status === "paid").length} gastos</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pendientes</CardTitle>
-            <TrendingUp className="h-4 w-4 text-orange-600" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-orange-600">${pendingExpenses.toLocaleString()}</div>
-            <p className="text-xs text-gray-600 mt-1">{expenses.filter((e) => e.status === "pending").length} gastos</p>
-          </CardContent>
-        </Card>
-      </div> */}
-
       <ExpensesStats 
         paidExpenses={paidExpenses}
         pendingExpenses={pendingExpenses}
         totalExpenses={totalExpenses}
+        paidCount={expenses.filter((e) => e.status === "paid").length}
+        pendingCount={expenses.filter((e) => e.status === "pending").length}
       />
 
       {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-        <Input
-          placeholder="Buscar por descripción, proveedor o categoría..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10"
-        />
-      </div>
+      <ExpensesSearch 
+        value={searchTerm}
+        onChange={setSearchTerm}
+      />
 
       {/* Table */}
       <Card>
