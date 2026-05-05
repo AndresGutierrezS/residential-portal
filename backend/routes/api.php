@@ -48,9 +48,10 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::get('payment-types', [PaymentController::class, 'getTypes']);
     Route::get('payment-reasons', [PaymentController::class, 'getReasons']);
     Route::patch('payments/{id}/mark-as-paid', [PaymentController::class, 'markAsPaid']);
+    
+    Route::apiResource('expenses', ExpenseController::class);
 });
 
-Route::apiResource('expenses', ExpenseController::class);
     
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(
