@@ -43,6 +43,8 @@ import { toast } from "sonner";
 import { PageHeader } from "../components/PageHeader";
 import { ExpensesStats } from "../expenses/components/ExpensesStats";
 import { ExpensesSearch } from "../expenses/components/ExpensesSearch";
+import { ExpensesTable } from "../expenses/components/ExpensesTable";
+import { useExpenses } from "../expenses/hooks/useExpenses";
 
 interface Expense {
   id: string;
@@ -90,6 +92,8 @@ export const ExpensesPage = () => {
       status: "pending",
     },
   ]);
+
+  const { expenses: expenses2 } = useExpenses();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -234,7 +238,7 @@ export const ExpensesPage = () => {
       />
 
       {/* Table */}
-      <Card>
+      {/* <Card>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
@@ -294,7 +298,13 @@ export const ExpensesPage = () => {
             </TableBody>
           </Table>
         </CardContent>
-      </Card>
+      </Card> */}
+      
+      <ExpensesTable 
+        expenses={expenses2}
+        // onDelete={() => openDeleteDialog()}
+        // onEdit={(e) => openEditDialog(e)}
+      />
 
       {/* Add Dialog */}
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
