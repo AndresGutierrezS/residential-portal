@@ -33,9 +33,15 @@ export const ExpensesPage = () => {
       expense.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-  const paidExpenses = expenses.filter((e) => e.state === true).reduce((sum, exp) => sum + exp.amount, 0);
-  const pendingExpenses = expenses.filter((e) => e.state === false).reduce((sum, exp) => sum + exp.amount, 0);
+  const totalExpenses = expenses.reduce((sum, exp) => sum + Number(exp.amount), 0);
+
+  const paidExpenses = expenses
+    .filter((e) => Boolean(e.state))
+    .reduce((sum, exp) => sum + Number(exp.amount), 0);
+
+  const pendingExpenses = expenses
+    .filter((e) => !Boolean(e.state))
+    .reduce((sum, exp) => sum + Number(exp.amount), 0);
 
 
   const handleDelete = async () => {
@@ -112,8 +118,8 @@ export const ExpensesPage = () => {
         paidExpenses={paidExpenses}
         pendingExpenses={pendingExpenses}
         totalExpenses={totalExpenses}
-        paidCount={expenses.filter((e) => e.state === true).length}
-        pendingCount={expenses.filter((e) => e.state === false).length}
+        paidCount={expenses.filter((e) => Boolean(e.state)).length}
+        pendingCount={expenses.filter((e) => !Boolean(e.state)).length}
       />
 
 
@@ -128,7 +134,7 @@ export const ExpensesPage = () => {
       )}
 
       <ExpensesTable 
-        expenses={expenses}
+        expenses={filteredExpenses}
         onDelete={openDeleteDialog}
         onEdit={openEditDialog}
       />

@@ -10,6 +10,14 @@ interface Props {
 }
 
 export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses, paidCount, pendingCount}:Props) => {
+    const formatCurrency = (value: number) =>
+        new Intl.NumberFormat("es-MX", {
+            style: "currency",
+            currency: "MXN",
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(value);
+    
     return (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card>
@@ -18,7 +26,7 @@ export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses, pa
                     <DollarSign className="h-4 w-4 text-gray-600" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold">${totalExpenses.toLocaleString()}</div>
+                    <div className="text-2xl font-bold">{formatCurrency(totalExpenses)}</div>
                     <p className="text-xs text-gray-600 mt-1">Este mes</p>
                 </CardContent>
                 </Card>
@@ -28,7 +36,7 @@ export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses, pa
                     <TrendingDown className="h-4 w-4 text-green-600" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold text-green-600">${paidExpenses.toLocaleString()}</div>
+                    <div className="text-2xl font-bold text-green-600">{formatCurrency(paidExpenses)}</div>
                     <p className="text-xs text-gray-600 mt-1">{paidCount} gastos</p>
                 </CardContent>
                 </Card>
@@ -38,7 +46,7 @@ export const ExpensesStats = ({ paidExpenses, pendingExpenses, totalExpenses, pa
                     <TrendingUp className="h-4 w-4 text-orange-600" />
                 </CardHeader>
                 <CardContent>
-                    <div className="text-2xl font-bold text-orange-600">${pendingExpenses.toLocaleString()}</div>
+                    <div className="text-2xl font-bold text-orange-600">{formatCurrency(pendingExpenses)}</div>
                     <p className="text-xs text-gray-600 mt-1">{pendingCount} gastos</p>
                 </CardContent>
             </Card>

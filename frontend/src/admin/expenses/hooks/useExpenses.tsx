@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createExpense, deleteExpense, getExpenses, updateExpense } from "../actions/expenses.actions";
-import type { Expense, ExpensePayload } from "../interfaces/expense.interface";
+import type { ExpensePayload } from "../interfaces/expense.interface";
 
 export const useExpenses = () => {
   
