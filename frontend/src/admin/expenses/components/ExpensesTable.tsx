@@ -7,8 +7,8 @@ import { Badge } from "@/components/ui/badge"
 
 interface Props {
     expenses: Expense[];
-    onEdit?: (expense: Expense) => void;
-    onDelete?: (expense: Expense) => void;
+    onEdit: (expense: Expense) => void;
+    onDelete: (expense: Expense) => void;
 }
 
 export const ExpensesTable = ({expenses, onDelete, onEdit}: Props) => {
@@ -54,14 +54,14 @@ export const ExpensesTable = ({expenses, onDelete, onEdit}: Props) => {
                             <Button
                             variant="ghost"
                             size="icon"
-                            // onClick={() => onEdit(expense)}
+                            onClick={() => onEdit(expense)}
                             >
                             <Pencil className="h-4 w-4" />
                             </Button>
                             <Button
                             variant="ghost"
                             size="icon"
-                            // onClick={() => onDelete(expense)}
+                            onClick={() => onDelete(expense)}
                             >
                             <Trash2 className="h-4 w-4 text-red-600" />
                             </Button>
