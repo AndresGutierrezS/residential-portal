@@ -2,17 +2,6 @@ import { useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-
 import { toast } from "sonner";
 import { PageHeader } from "../components/PageHeader";
 import { ExpensesStats } from "../expenses/components/ExpensesStats";
@@ -22,6 +11,7 @@ import { useExpenses } from "../expenses/hooks/useExpenses";
 import type { Expense } from "../expenses/interfaces/expense.interface";
 import { ExpensesFormDialog, type ExpenseFormValues } from "../expenses/components/ExpensesFormDialog";
 import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
+import { ExpensesDeleteDialog } from "../expenses/components/ExpensesDeleteDialog";
 
 
 export const ExpensesPage = () => {
@@ -118,7 +108,6 @@ export const ExpensesPage = () => {
       />
 
 
-      {/* Stats */}
       <ExpensesStats 
         paidExpenses={paidExpenses}
         pendingExpenses={pendingExpenses}
@@ -127,7 +116,7 @@ export const ExpensesPage = () => {
         pendingCount={expenses.filter((e) => e.state === false).length}
       />
 
-      {/* Search */}
+
       <ExpensesSearch 
         value={searchTerm}
         onChange={setSearchTerm}
@@ -138,7 +127,6 @@ export const ExpensesPage = () => {
         <LoadingSpinner show/> 
       )}
 
-      {/* Table */}
       <ExpensesTable 
         expenses={expenses}
         onDelete={openDeleteDialog}
@@ -154,21 +142,12 @@ export const ExpensesPage = () => {
         isSubmitting={isLoading}
       />
 
-      {/* Delete Dialog */}
-      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta acción no se puede deshacer. El gasto será eliminado permanentemente.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Eliminar</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <ExpensesDeleteDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+        onConfirm={handleDelete}
+        isDeleting={isLoading}
+      />
     </div>
   );
 }
