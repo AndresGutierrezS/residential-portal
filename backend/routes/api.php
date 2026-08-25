@@ -40,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
     
 Route::middleware('auth:sanctum', 'admin')->group(function () {
+    Route::get('residents/pending', [ResidentController::class, 'pending']);    
+
     Route::apiResource('cars', CarController::class);
     Route::apiResource('residents', ResidentController::class);
     Route::apiResource('apartments', ApartmentController::class);

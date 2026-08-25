@@ -147,4 +147,14 @@ class ResidentController extends Controller
 
         return response()->json($residents);
     }
+
+    public function pending()
+    {
+        $people = Person::with('user')
+            ->whereHas('user')
+            ->whereDoesntHave('apartmentPeople')
+            ->get();
+
+        return response()->json($people);
+    }
 }
