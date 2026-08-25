@@ -27,41 +27,46 @@ class ResidentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string',
-            'last_name' => 'required|string',
-            'second_last_name' => 'nullable|string',
-            'phone' => 'required|string',
-            'email' => 'required',
+            'person_id' => 'required|exists:people,id',
+            'apartment_id' => 'required|exists:apartments,id',
             'role_id' => 'required|exists:roles,id',
-            'code' => 'required|string|exists:apartments,code',
+            'is_resident' => 'required|boolean'
         ]);
 
+        $person = Person::findOrFail($request->person_id);
+
+        if($person->apartmentPeople()->exists()) {
+            return response()->json([
+                'message' => 'La persona ya se encuentra asignada a un apartmento'
+            ], 409);
+        }
+
         try {
-            $person = Person::create([
-                'name' => $request->name,
-                'last_name' => $request->last_name,
-                'second_last_name' => $request->second_last_name,
-                'phone' => $request->phone,
-                'is_active' => true,
-            ]);
-    
-            $apartment = Apartment::where('code', $request->code)->firstOrFail();
-    
+
+            $apartment = Apartment::findOrFail($request->apartment_id);
+
             $resident = ApartmentPerson::create([
                 'person_id' => $person->id,
+                // 'apartment_id' => $request->apartment_id,
                 'apartment_id' => $apartment->id,
                 'role_id' => $request->role_id,
-                'is_resident' => true,
-                'code' => $request->code,
+                'is_resident' => $request->is_resident,
+                'code' => $apartment->code
             ]);
-    
-            return response()->json($resident, 201);
+
+            return response()->json(
+                $resident->load(['person', 'apartment', 'role']),
+                201
+            );
 
         } catch (\Exception $e) {
-            
+
             return response()->json([
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
             ], 500);
+
         }
     }
 
