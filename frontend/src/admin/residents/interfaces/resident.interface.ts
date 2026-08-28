@@ -25,13 +25,10 @@ export interface Resident {
 }
 
 export interface ResidentDTO {
-  name: string;
-  last_name: string;
-  second_last_name?: string;
-  phone: string;  
-  email: string;
-  role_id: number;
-  code: string;
+    person_id: number;
+    apartment_id: number;
+    role_id: number;
+    is_resident: boolean;
 }
 
 

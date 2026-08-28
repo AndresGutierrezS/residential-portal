@@ -157,4 +157,12 @@ class ResidentController extends Controller
 
         return response()->json($people);
     }
+
+    public function roles()
+    {
+        return response()->json(
+            \App\Models\Role::all()
+        );
+    }
+
 }
