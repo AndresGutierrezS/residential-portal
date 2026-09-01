@@ -34,7 +34,7 @@ export const ResidentFormDialog = ({
   resident,
   onSubmit,
 }: Props) => {
-    const { pendingPeople, isLoading, roles } = useResidentFormData();
+    const { pendingPeople, roles } = useResidentFormData();
 
     const { apartments } = useApartments();
   
@@ -46,11 +46,19 @@ export const ResidentFormDialog = ({
 
 
   useEffect(() => {
-    setFormData({
-        person_id: "",
-        apartment_id: "",
-        role_id: "",
-    });
+    if (resident) {
+        setFormData({
+            person_id: String(resident.person_id),
+            apartment_id: String(resident.apartment_id),
+            role_id: String(resident.role_id),
+        });
+    } else {
+        setFormData({
+            person_id: "",
+            apartment_id: "",
+            role_id: "",
+        });
+    }
   }, [resident, open]);
 
   const handleSubmit = () => {
@@ -73,7 +81,9 @@ export const ResidentFormDialog = ({
           </DialogTitle>
 
           <DialogDescription>
-            Asigne una persona a un apartamento
+            {resident
+              ? "Modifique la unidad o el rol del residente"
+              : "Asigne una persona a un apartamento"}
           </DialogDescription>
         </DialogHeader>
 
@@ -83,6 +93,7 @@ export const ResidentFormDialog = ({
 
             <Select
               value={formData.person_id}
+              disabled={!!resident}
               onValueChange={(value) =>
                 setFormData({
                   ...formData,
@@ -95,16 +106,25 @@ export const ResidentFormDialog = ({
               </SelectTrigger>
 
               <SelectContent>
-                {pendingPeople.map((person) => (
-                    <SelectItem 
-                        key={person.id}
-                        value={String(person.id)}
+                {resident && (
+                  <SelectItem
+                    value={String(resident.person_id)}
+                  >
+                    {resident.fullName} - {resident.email}
+                  </SelectItem>
+                )}
+
+                {!resident &&
+                  pendingPeople.map((person) => (
+                    <SelectItem
+                      key={person.id}
+                      value={String(person.id)}
                     >
-                        {person.name} {person.last_name} {person.second_last_name}
-                        {" - "}
-                        {person.user?.email}
+                      {person.name} {person.last_name} {person.second_last_name}
+                      {" - "}
+                      {person.user?.email}
                     </SelectItem>
-                ))}
+                  ))}
               </SelectContent>
             </Select>
           </div>
@@ -127,15 +147,19 @@ export const ResidentFormDialog = ({
 
               <SelectContent>
                 {apartments
-                    .filter((apartment) => apartment.status === "vacant")
-                    .map((apartment) => (
-                        <SelectItem
-                            key={apartment.id}
-                            value={String(apartment.id)}
-                        >
-                            {apartment.code}
-                        </SelectItem>
-                    ))}
+                  .filter(
+                    (apartment) =>
+                      apartment.status === "vacant" ||
+                      apartment.id === resident?.apartment_id
+                  )
+                  .map((apartment) => (
+                    <SelectItem
+                      key={apartment.id}
+                      value={String(apartment.id)}
+                    >
+                      {apartment.code}
+                    </SelectItem>
+                  ))}
             </SelectContent>
             </Select>
           </div>

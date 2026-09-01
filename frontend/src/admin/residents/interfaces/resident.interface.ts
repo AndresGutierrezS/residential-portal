@@ -18,6 +18,9 @@ export interface ResidentResponse {
 
 export interface Resident {
     id: number;
+    person_id: number;
+    apartment_id: number;
+    role_id: number;
     fullName: string;
     code: string;
     email: string;

@@ -14,7 +14,7 @@ class ResidentController extends Controller
      */
     public function index()
     {
-        $residents = ApartmentPerson::with(['person', 'apartment', 'role'])
+        $residents = ApartmentPerson::with(['person.user', 'apartment', 'role'])
             ->where('is_resident', true)
             ->get();
 
@@ -55,7 +55,7 @@ class ResidentController extends Controller
             ]);
 
             return response()->json(
-                $resident->load(['person', 'apartment', 'role']),
+                $resident->load(['person.user', 'apartment', 'role']),
                 201
             );
 
@@ -84,33 +84,28 @@ class ResidentController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'name' => 'required|string',
-            'last_name' => 'required|string',
-            'second_last_name' => 'nullable|string',
-            'phone' => 'required|string',
-            'email' => 'required',
+            'apartment_id' => 'required|exists:apartments,id',
             'role_id' => 'required|exists:roles,id',
-            'code' => 'required|string|exists:apartments,code',
+            'is_resident' => 'required|boolean'
         ]);
 
         try {
             $resident = ApartmentPerson::findOrFail($id);
 
-            $resident->person->update([
-                'name' => $request->name,
-                'last_name' => $request->last_name,
-                'second_last_name' => $request->second_last_name,
-                'phone' => $request->phone,
-            ]);
-
-            $apartment = Apartment::where('code', $request->code)->firstOrFail();
+            $apartment = Apartment::findOrFail($request->apartment_id);
 
             $resident->update([
                 'apartment_id' => $apartment->id,
                 'role_id' => $request->role_id,
+                'is_resident' => $request->is_resident,
+                'code' => $apartment->code,
             ]);
 
-            return response()->json($resident->load(['person', 'apartment', 'role']));
+            return response()->json(
+                $resident->load(['person.user', 'apartment', 'role'])   
+            );
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage()
