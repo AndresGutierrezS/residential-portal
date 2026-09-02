@@ -5,6 +5,7 @@ export interface Apartment {
     name: string;
     code: string;
     floor: number;
+    area: number;
     is_overdue: number;
     status: Status;
 }
@@ -14,6 +15,7 @@ export interface ApartmentResponse {
     name:       string;
     is_overdue: number;
     code:       string;
+    area:       number;
     created_at: string | null;
     updated_at: string | null;
     status:     Status;
@@ -22,6 +24,7 @@ export interface ApartmentResponse {
 export interface ApartmentDTO {
     code: string;
     status: Status;
+    area: number;
     name?: string;
     is_overdue?: number;
 }
@@ -31,5 +34,4 @@ export interface ApartmentForm {
     status: Status;
     area?: string;
     floor?: string;
-    owner?: string;
 }

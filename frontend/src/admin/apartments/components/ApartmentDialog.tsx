@@ -20,7 +20,6 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
         status: "vacant",
         area: '',
         floor: '',
-        owner: '',
     });
 
     useEffect(() => {
@@ -29,8 +28,7 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
                 code: initialData.code,
                 status: initialData.status,
                 floor: String(initialData.floor),
-                area: '85m2',
-                owner: '',
+                area: String(initialData.area),
             });
         } else {
             setFormData({
@@ -38,7 +36,6 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
                 status: "vacant",
                 area: '',
                 floor: '',
-                owner: '',
             })
         }
     }, [initialData]);
@@ -49,6 +46,7 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
         const dto: ApartmentDTO = {
           code: formData.code,
           status: formData.status,
+          area: Number(formData.area),
         }
 
         onSubmit(dto);
@@ -57,7 +55,6 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
             status: "vacant",
             area: '',
             floor: '',
-            owner: '',
         })
     }
 
@@ -108,15 +105,6 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
                     <SelectItem value="maintenance">Mantenimiento</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="owner">Propietario</Label>
-                <Input
-                  id="owner"
-                  value={formData.owner}
-                  onChange={(e) => setFormData({ ...formData, owner: e.target.value })}
-                  placeholder="Nombre del propietario"
-                />
               </div>
             </div>
             <DialogFooter>

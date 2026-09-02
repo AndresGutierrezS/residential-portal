@@ -35,7 +35,7 @@ export const ApartmentCard = ({apartment, onDelete: handleDelete, onEdit: handle
                 <div className="space-y-2 mb-4">
                 <div className="text-sm">
                     <span className="text-gray-600">Área:</span>{" "}
-                    <span className="font-medium">85.5 m2</span>
+                    <span className="font-medium">{apartment.area} m2</span>
                 </div>
                 {/* {apartment.owner && (
                     <div className="text-sm">
