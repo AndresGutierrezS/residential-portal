@@ -10,7 +10,8 @@ class Apartment extends Model
         'name',
         'is_overdue',
         'code',
-        'status'
+        'status',
+        'area',
     ];
 
     public function apartmentPeople()

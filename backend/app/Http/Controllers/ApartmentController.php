@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Apartment;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ApartmentController extends Controller
 {
@@ -24,8 +25,9 @@ class ApartmentController extends Controller
     {
   
         $request->validate([
-            'code' => 'required|string',
+            'code' => 'required|string|unique:apartments,code',
             'status' => 'required|string',
+            'area' => 'required|numeric|min:1'
         ]);
 
         $apartment = Apartment::create([
@@ -33,6 +35,7 @@ class ApartmentController extends Controller
             'code' => $request->code,
             'is_overdue' => false,
             'status' => $request->status,
+            'area' => $request->area,
         ]);
 
         return response()->json($apartment, 201);
@@ -56,16 +59,17 @@ class ApartmentController extends Controller
     {
         
             $request->validate([
-                'code' => 'sometimes|string',
+                'code' => ['sometimes','string', Rule::unique('apartments', 'code')->ignore($id)],
                 'name' => 'sometimes|string',
                 'is_overdue' => 'sometimes|boolean', 
-                'status' => 'sometimes|string', 
+                'status' => 'sometimes|string',
+                'area' => 'sometimes|numeric|min:1' 
             ]);
     
             $apartment = Apartment::findOrFail($id);
         
             try {
-                $data = $request->only(['code', 'status', 'is_overdue']);
+                $data = $request->only(['code', 'status', 'is_overdue', 'area']);
 
                 if ($request->has('code')) {
                     $data['name'] = 'Apartamento ' . $request->code;
