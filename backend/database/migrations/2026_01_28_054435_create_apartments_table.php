@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('is_overdue');
-            $table->string('code');
+            $table->string('code')->unique();
             $table->string('status');
             $table->timestamps();
         });

@@ -30,8 +30,9 @@ export interface ApartmentDTO {
 }
 
 export interface ApartmentForm {
-    code: string;
+    tower: string;
+    floor: string;
+    number: string;
     status: Status;
-    area?: string;
-    floor?: string;
+    area: string;
 }

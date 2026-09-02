@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label"
 import { SelectTrigger, SelectValue, SelectContent, SelectItem, Select } from "@/components/ui/select"
 import { useEffect, useState } from "react"
 import type { Apartment, ApartmentDTO, ApartmentForm } from "../interfaces/apartment.interface"
+import { buildApartmentCode, parseApartmentCode } from "../utils/apartmentCode.util"
 
 interface Props {
     open: boolean;
@@ -16,47 +17,71 @@ interface Props {
 export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Props) => {
     
     const [formData, setFormData] = useState<ApartmentForm>({
-        code: '',
+        tower: '',
+        floor: '',
+        number: '',
         status: "vacant",
         area: '',
-        floor: '',
     });
 
     useEffect(() => {
         if(initialData) {
-            setFormData({
-                code: initialData.code,
-                status: initialData.status,
-                floor: String(initialData.floor),
-                area: String(initialData.area),
-            });
+          const parsedCode = parseApartmentCode(initialData.code);
+
+          if(!parsedCode) {
+            return;
+          } 
+          
+          setFormData({
+            tower: parsedCode.tower,
+            floor: parsedCode.floor,
+            number: parsedCode.number,
+            status: initialData.status,
+            area: String(initialData.area),
+              });
         } else {
             setFormData({
-                code: "",
+                tower: "",
+                floor: "",
+                number: "",
                 status: "vacant",
-                area: '',
-                floor: '',
-            })
+                area: "",
+            });
         }
     }, [initialData]);
 
     const handleSubmit = () => {
-        if(!formData.code) return;
-
-        const dto: ApartmentDTO = {
-          code: formData.code,
-          status: formData.status,
-          area: Number(formData.area),
+        if (
+            !formData.tower ||
+            !formData.floor ||
+            !formData.number ||
+            !formData.area
+        ) {
+            return;
         }
 
+        const code = buildApartmentCode(
+            formData.tower,
+            formData.floor,
+            formData.number
+        );
+
+        const dto: ApartmentDTO = {
+            code,
+            status: formData.status,
+            area: Number(formData.area),
+        };
+
         onSubmit(dto);
+
         setFormData({
-            code: "",
+            tower: "",
+            floor: "",
+            number: "",
             status: "vacant",
-            area: '',
-            floor: '',
-        })
-    }
+            area: "",
+        });
+    };
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -67,31 +92,88 @@ export const ApartmentDialog = ({ onOpenChange, onSubmit, open, initialData}: Pr
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="code">Código</Label>
-                <Input
-                  id="code"
-                  value={formData.code}
-                  onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-                  placeholder="101"
-                />
+                  <Label htmlFor="tower">Torre</Label>
+
+                  <Select
+                      value={formData.tower}
+                      onValueChange={(value) =>
+                          setFormData({ ...formData, tower: value })
+                      }
+                  >
+                      <SelectTrigger>
+                          <SelectValue placeholder="Selecciona una torre" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                          <SelectItem value="A">Torre A</SelectItem>
+                          <SelectItem value="B">Torre B</SelectItem>
+                          <SelectItem value="C">Torre C</SelectItem>
+                      </SelectContent>
+                  </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="floor">Piso</Label>
-                <Input
-                  id="floor"
-                  value={formData.floor}
-                  onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
-                  placeholder="1"
-                />
+                  <Label htmlFor="floor">Piso</Label>
+
+                  <Select
+                      value={formData.floor}
+                      onValueChange={(value) =>
+                          setFormData({ ...formData, floor: value })
+                      }
+                  >
+                      <SelectTrigger>
+                          <SelectValue placeholder="Selecciona un piso" />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                          {Array.from({ length: 10 }, (_, index) => {
+                              const floor = index + 1;
+
+                              return (
+                                  <SelectItem
+                                      key={floor}
+                                      value={String(floor)}
+                                  >
+                                      Piso {floor}
+                                  </SelectItem>
+                              );
+                          })}
+                      </SelectContent>
+                  </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="area">Área</Label>
-                <Input
-                  id="area"
-                  value={formData.area}
-                  onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-                  placeholder="85m²"
-                />
+                  <Label htmlFor="number">Número de unidad</Label>
+
+                  <Input
+                      id="number"
+                      type="number"
+                      min={1}
+                      max={20}
+                      inputMode="numeric"
+                      value={formData.number}
+                      onChange={(e) => setFormData({
+                          ...formData,
+                          number: e.target.value
+                      })}
+                      placeholder="5"
+                  />
+              </div>
+              <div className="space-y-2">
+                  <Label htmlFor="area">Área (m²)</Label>
+
+                  <Input
+                      id="area"
+                      type="number"
+                      min={1}
+                      step="0.01"
+                      value={formData.area}
+                      onChange={(e) =>
+                          setFormData({
+                              ...formData,
+                              area: e.target.value
+                          })
+                      }
+                      placeholder="85.5"
+                  />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="status">Estado</Label>

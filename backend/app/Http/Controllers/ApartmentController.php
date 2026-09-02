@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Apartment;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ApartmentController extends Controller
 {
@@ -25,9 +24,21 @@ class ApartmentController extends Controller
     {
   
         $request->validate([
-            'code' => 'required|string|unique:apartments,code',
-            'status' => 'required|string',
-            'area' => 'required|numeric|min:1'
+            'code' => [
+                'required',
+                'string',
+                'regex:/^[A-Z]+-[1-9][0-9]?[0-9]{2}$/',
+                'unique:apartments,code',
+            ],
+            'status' => [
+                'required',
+                'in:occupied,vacant,maintenance',
+            ],
+            'area' => [
+                'required',
+                'numeric',
+                'min:1',
+            ],
         ]);
 
         $apartment = Apartment::create([
@@ -59,11 +70,23 @@ class ApartmentController extends Controller
     {
         
             $request->validate([
-                'code' => ['sometimes','string', Rule::unique('apartments', 'code')->ignore($id)],
+                'code' => [
+                    'sometimes',
+                    'string',
+                    'regex:/^[A-Z]+-[1-9][0-9]?[0-9]{2}$/',
+                    'unique:apartments,code,' . $id,
+                ],
                 'name' => 'sometimes|string',
-                'is_overdue' => 'sometimes|boolean', 
-                'status' => 'sometimes|string',
-                'area' => 'sometimes|numeric|min:1' 
+                'is_overdue' => 'sometimes|boolean',
+                'status' => [
+                    'sometimes',
+                    'in:occupied,vacant,maintenance',
+                ],
+                'area' => [
+                    'sometimes',
+                    'numeric',
+                    'min:1',
+                ],
             ]);
     
             $apartment = Apartment::findOrFail($id);

@@ -9,6 +9,7 @@ import { PageHeader } from "../components/PageHeader";
 import { ApartmentDialog } from "../apartments/components/ApartmentDialog";
 import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
 import { DeleteApartmentDialog } from "../apartments/components/DeleteApartmentDialog";
+import { isAxiosError } from "axios";
 
 
 export const UnitsPage = () => {
@@ -25,7 +26,13 @@ export const UnitsPage = () => {
         toast.success("Apartmento creado correctamente");
         setIsDialogOpen(false);
       },
-      onError: () => toast.error("Error al crear apartamento"),
+      onError: (error) => {
+        if (isAxiosError(error) && error.response?.status === 422) {
+                toast.error("Ya existe una unidad con ese código");
+                return;
+            }
+        toast.error("Error al crear apartamento")
+      },
     });
   };
 
@@ -33,8 +40,9 @@ export const UnitsPage = () => {
     if(!editingUnit) return;
 
     const payload: ApartmentDTO = {
-      code: data.code,
-      status: data.status,
+        code: data.code,
+        status: data.status,
+        area: data.area,
     };
 
     if (data.is_overdue !== undefined) {
@@ -52,7 +60,14 @@ export const UnitsPage = () => {
         toast.success("Apartamento actualizado");
         setEditingUnit(null);
       },
-      onError: () => toast.error("Error al actualizar el departamento"),
+      onError: (error) => {
+          if (isAxiosError(error) && error.response?.status === 422) {
+              toast.error("Ya existe una unidad con ese código");
+              return;
+          }
+
+          toast.error("Error al actualizar el apartamento");
+      },
     });
   };
 
