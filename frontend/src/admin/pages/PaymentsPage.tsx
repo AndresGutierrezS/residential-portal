@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { PaymentsSummary } from "../payments/components/PaymentsSummary";
 import { PaymentsTable } from "../payments/components/PaymentsTable";
+import { useApartments } from "../apartments/hooks/useApartments";
 
 
 export const PaymentsPage = () => {
@@ -13,6 +14,8 @@ export const PaymentsPage = () => {
   const [typeId, setTypeId] = useState<number | undefined>();
   
   const { payments, createPayment, deletePayment, reasons, types, markAsPaid, isError, isLoading } = usePayments( typeId );
+
+  const { apartments } = useApartments();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -43,6 +46,7 @@ export const PaymentsPage = () => {
       onSubmit={createPayment}
       types={types}
       reasons={reasons}
+      apartments={apartments}
       onTypeChange={setTypeId}
      />
 

@@ -10,6 +10,7 @@ import type { PaymentType, PaymentReason, CreatePaymentDTO } from "../interfaces
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import type { Apartment } from "@/admin/apartments/interfaces/apartment.interface";
 
 interface Props {
     isOpen: boolean;
@@ -18,6 +19,7 @@ interface Props {
 
     types: PaymentType[];
     reasons: PaymentReason[];
+    apartments: Apartment[];
 
     onTypeChange: (typeId: number) => void;
 }
@@ -50,6 +52,7 @@ export const PaymentFormDialog = ({
     onSubmit,
     types,
     reasons,
+    apartments,
     onTypeChange
 }: Props) => {
 
@@ -95,7 +98,7 @@ export const PaymentFormDialog = ({
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
-            <DialogContent>
+            <DialogContent className="max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                     <DialogTitle>Registrar Pago</DialogTitle>
                     <DialogDescription>
@@ -106,8 +109,29 @@ export const PaymentFormDialog = ({
                 <div className="space-y-4 py-4">
 
                     <div className="space-y-2">
-                        <Label>Departamento (ID)</Label>
-                        <Input {...register("apartment_id")} />
+                        <Label>Unidad</Label>
+
+                        <Select
+                            onValueChange={(value) =>
+                                setValue("apartment_id", value)
+                            }
+                        >
+                            <SelectTrigger>
+                                <SelectValue placeholder="Selecciona una unidad" />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {apartments.map((apartment) => (
+                                    <SelectItem
+                                        key={apartment.id}
+                                        value={String(apartment.id)}
+                                    >
+                                        {apartment.code}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+
                         {errors.apartment_id && (
                             <p className="text-red-500 text-sm">
                                 {errors.apartment_id.message}
@@ -218,12 +242,28 @@ export const PaymentFormDialog = ({
                         <>
                             <div className="space-y-2">
                                 <Label>Mes</Label>
-                                <Input type="number" {...register("month")} />
-                                {errors.month && (
-                                    <p className="text-red-500 text-sm">
-                                        {errors.month.message}
-                                    </p>
-                                )}
+                                <Select
+                                onValueChange={(value) => setValue("month", value)}
+                                >
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Selecciona mes" />
+                                </SelectTrigger>
+
+                                <SelectContent>
+                                    <SelectItem value="1">Enero</SelectItem>
+                                    <SelectItem value="2">Febrero</SelectItem>
+                                    <SelectItem value="3">Marzo</SelectItem>
+                                    <SelectItem value="4">Abril</SelectItem>
+                                    <SelectItem value="5">Mayo</SelectItem>
+                                    <SelectItem value="6">Junio</SelectItem>
+                                    <SelectItem value="7">Julio</SelectItem>
+                                    <SelectItem value="8">Agosto</SelectItem>
+                                    <SelectItem value="9">Septiembre</SelectItem>
+                                    <SelectItem value="10">Octubre</SelectItem>
+                                    <SelectItem value="11">Noviembre</SelectItem>
+                                    <SelectItem value="12">Diciembre</SelectItem>
+                                </SelectContent>
+                                </Select>
                             </div>
 
                             <div className="space-y-2">

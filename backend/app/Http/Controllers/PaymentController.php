@@ -97,7 +97,7 @@ class PaymentController extends Controller
         if ($payment->maintenance) {
             $payment->maintenance->update([
                 'amount' => $payment->amount,
-                'completed' => $payment->is_paid,
+                'is_completed' => $payment->is_paid,
             ]);
         }
 

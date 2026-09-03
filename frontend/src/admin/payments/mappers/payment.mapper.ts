@@ -21,7 +21,7 @@ export const mapPayment = (p: PaymentResponse): Payment => ({
         ? {
               month: p.maintenance.month,
               year: p.maintenance.year,
-              completed: Boolean(p.maintenance.completed),
+              is_completed: Boolean(p.maintenance.is_completed),
           }
         : undefined,
 });

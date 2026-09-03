@@ -31,6 +31,22 @@ export const PaymentsTable = ({ payments, isLoading, onMarkAsPaid }: Props) => {
         }).format(amount);
     };
 
+    const months = [
+        "",
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre",
+    ];
+
     return (
         <Card>
             <CardHeader>
@@ -41,65 +57,69 @@ export const PaymentsTable = ({ payments, isLoading, onMarkAsPaid }: Props) => {
             {isLoading && (
                 <LoadingSpinner show/>
             )}
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Unidad</TableHead>
-                        <TableHead>Mes</TableHead>
-                        <TableHead>Monto</TableHead>
-                        <TableHead>Tipo</TableHead>
-                        <TableHead>Motivo</TableHead>
-                        <TableHead>Estado</TableHead>
-                        <TableHead>Fecha de Pago</TableHead>
-                        <TableHead className="text-right">Acciones</TableHead>
-                    </TableRow>
-                </TableHeader>
-
-                <TableBody>
-                    {payments.map((payment) => (
-                        <TableRow key={payment.id}>
-
-                            <TableCell className="font-medium">
-                                {payment.apartment?.name.split(' ')[1]}
-                            </TableCell>
-                            <TableCell>
-                                {formatMonth(payment.date)}
-                            </TableCell>
-                            <TableCell>
-                                {formatCurrency(payment.amount)}
-                            </TableCell>
-                            <TableCell>
-                                <Badge variant="outline">
-                                    {payment.paymentType?.type}
-                                </Badge>
-                            </TableCell>
-                            <TableCell>
-                                {payment.paymentReason?.reason}
-                            </TableCell>
-                            <TableCell>
-                                <Badge variant={payment.isPaid ? 'default' : 'secondary'}>
-                                    {payment.isPaid ? 'Pagado' : 'Pendiente'}
-                                </Badge>
-                            </TableCell>
-                            <TableCell>
-                                {payment.isPaid ? formatDate(payment.date) : "-"}
-                            </TableCell>
-                            <TableCell className="text-right">
-                                {!payment.isPaid && (
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => onMarkAsPaid(payment.id)}
-                                    >
-                                        Marcar como Pagado
-                                    </Button>
-                                )}
-                            </TableCell>
-
+            <div className="overflow-x-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Unidad</TableHead>
+                            <TableHead>Mes</TableHead>
+                            <TableHead>Monto</TableHead>
+                            <TableHead>Tipo</TableHead>
+                            <TableHead>Motivo</TableHead>
+                            <TableHead>Estado</TableHead>
+                            <TableHead>Fecha de Pago</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
+                    </TableHeader>
+
+                    <TableBody>
+                        {payments.map((payment) => (
+                            <TableRow key={payment.id}>
+
+                                <TableCell className="font-medium">
+                                    {payment.apartment?.code}
+                                </TableCell>
+                                <TableCell>
+                                    {payment.maintenance
+                                        ? months[payment.maintenance.month]
+                                        : formatMonth(payment.date)}
+                                </TableCell>
+                                <TableCell>
+                                    {formatCurrency(payment.amount)}
+                                </TableCell>
+                                <TableCell>
+                                    <Badge variant="outline">
+                                        {payment.paymentType?.type}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    {payment.paymentReason?.reason}
+                                </TableCell>
+                                <TableCell>
+                                    <Badge variant={payment.isPaid ? 'default' : 'secondary'}>
+                                        {payment.isPaid ? 'Pagado' : 'Pendiente'}
+                                    </Badge>
+                                </TableCell>
+                                <TableCell>
+                                    {payment.isPaid ? formatDate(payment.date) : "-"}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    {!payment.isPaid && (
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => onMarkAsPaid(payment.id)}
+                                        >
+                                            Marcar como Pagado
+                                        </Button>
+                                    )}
+                                </TableCell>
+
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
             </CardContent>
         </Card>
     )

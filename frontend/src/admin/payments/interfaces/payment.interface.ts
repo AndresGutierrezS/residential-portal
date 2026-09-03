@@ -1,3 +1,5 @@
+import type { Apartment } from "@/admin/residents/interfaces/apartment.interface";
+
 export interface PaymentType {
     id:         number;
     type:       string;
@@ -35,15 +37,15 @@ export interface PaymentResponse {
     maintenance?: Maintenance | null;
 }
 
-export interface Apartment {
-    id:         number;
-    name:       string;
-    is_overdue: number;
-    code:       string;
-    created_at: string;
-    updated_at: string;
-    status:     string;
-}
+// export interface Apartment {
+//     id:         number;
+//     name:       string;
+//     is_overdue: number;
+//     code:       string;
+//     created_at: string;
+//     updated_at: string;
+//     status:     string;
+// }
 
 
 export interface Report {
@@ -61,7 +63,7 @@ export interface Maintenance {
     month: number;
     year: number;
     amount: string; 
-    completed: number; 
+    is_completed: number; 
 }
 
 export interface Payment {
@@ -84,7 +86,7 @@ export interface Payment {
     maintenance?: {
         month: number;
         year: number;
-        completed: boolean;
+        is_completed: boolean;
     };
 }
 
