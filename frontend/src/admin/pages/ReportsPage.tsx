@@ -16,9 +16,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
+import { useReports } from "../reports/hooks/useReports";
+import { PaymentsReportTable } from "../reports/components/PaymentsReportTable";
+import type { ReportApartment, ReportMaintenance, ReportPayment, ReportResident } from "../reports/interfaces/reports.interface";
+import { ResidentsReportTable } from "../reports/components/ResidentsReportTable";
+import { ApartmentsReportTable } from "../reports/components/ApartmentsReportTable";
+import { MaintenanceReportTable } from "../reports/components/MaintenanceReportTable";
 
 export const ReportsPage = () => {
   const [reportType, setReportType] = useState("payments");
+  const { data, isLoading } = useReports(
+    reportType as "payments" | "residents" | "units" | "maintenance"
+  );
 
   const reportTypes = [
     {
@@ -68,7 +78,6 @@ export const ReportsPage = () => {
         </p>
       </div>
 
-      {/* Report Configuration */}
       <Card>
         <CardHeader>
           <CardTitle>Configuración del Reporte</CardTitle>
@@ -103,7 +112,6 @@ export const ReportsPage = () => {
         </CardContent>
       </Card>
 
-      {/* Report Types */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {reportTypes.map((type) => (
           <Card
@@ -130,7 +138,7 @@ export const ReportsPage = () => {
         ))}
       </div>
 
-      {/* Report Results */}
+      
       <Card>
         <CardHeader>
           <CardTitle>{selectedReport?.label}</CardTitle>
@@ -141,13 +149,37 @@ export const ReportsPage = () => {
         </CardHeader>
 
         <CardContent>
-          <div className="bg-gray-50 rounded-lg p-8 text-center">
-            <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
 
-            <p className="text-gray-600">
-              Selecciona un tipo de reporte y haz clic en "Generar Reporte"
-            </p>
-          </div>
+          {isLoading ? (
+              <LoadingSpinner show/>
+          ) : (
+              <>
+                  {reportType === "payments" && (
+                      <PaymentsReportTable
+                          payments={data as ReportPayment[]}
+                      />
+                  )}
+
+                  {reportType === "residents" && (
+                      <ResidentsReportTable
+                          residents={data as ReportResident[]}
+                      />
+                  )}
+
+                  {reportType === "units" && (
+                      <ApartmentsReportTable
+                          apartments={data as ReportApartment[]}
+                      />
+                  )}
+
+                  {reportType === "maintenance" && (
+                      <MaintenanceReportTable
+                          maintenances={data as ReportMaintenance[]}
+                      />
+                  )}
+              </>
+          )}
+
         </CardContent>
       </Card>
     </div>
