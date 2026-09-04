@@ -57,6 +57,9 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::apiResource('expenses', ExpenseController::class);
 
     Route::get('/reports/payments', [ReportController::class, 'payments']);
+    Route::get('/reports/residents', [ReportController::class, 'residents']);
+    Route::get('/reports/apartments', [ReportController::class, 'apartments']);
+    Route::get('/reports/maintenance', [ReportController::class, 'maintenance']);
 });
 
     
