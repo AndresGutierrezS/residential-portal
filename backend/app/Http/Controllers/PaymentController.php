@@ -132,6 +132,12 @@ class PaymentController extends Controller
         $payment->is_paid = true;
         $payment->save();
 
-        return response()->json($payment);
+        if ($payment->maintenance) {
+            $payment->maintenance->update([
+                'is_completed' => true,
+            ]);
+        }
+
+        return response()->json($payment->load('maintenance'));
     }
 }

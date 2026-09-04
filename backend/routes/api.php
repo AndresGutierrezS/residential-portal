@@ -10,6 +10,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ResidentController;
 use Illuminate\Http\Request;
 
@@ -54,6 +55,8 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::patch('payments/{id}/mark-as-paid', [PaymentController::class, 'markAsPaid']);
     
     Route::apiResource('expenses', ExpenseController::class);
+
+    Route::get('/reports/payments', [ReportController::class, 'payments']);
 });
 
     
