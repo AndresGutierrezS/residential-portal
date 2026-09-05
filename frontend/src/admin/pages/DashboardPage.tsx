@@ -1,41 +1,68 @@
 import { Users, Building, CreditCard, MessageSquare } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { usePayments } from "../payments/hooks/usePayments";
+import { useApartments } from "../apartments/hooks/useApartments";
+import { useReports } from "../reports/hooks/useReports";
+import { LoadingSpinner } from "@/components/custom/LoadingSpinner";
 
 export const DashboardPage = () => {
+  const { apartments, isLoading: isApartmentsLoading } = useApartments();
+  const { payments, isLoading: isPaymentsLoading } = usePayments();
+  const { data: residents, isLoading: isResidentsLoading } = useReports("residents");
+
+  const totalUnits = apartments.length;
+
+  const occupiedUnits = apartments.filter(
+      (apartment) => apartment.status === "occupied"
+  ).length;
+
+  const pendingPayments = payments.filter(
+      (payment) => !payment.isPaid
+  );
+
+  const pendingPaymentsAmount = pendingPayments.reduce(
+      (total, payment) => total + payment.amount,
+      0
+  );
+
+  const totalResidents = residents.length;
+
+    
   const stats = [
     {
-      title: "Total Residentes",
-      value: "245",
-      description: "+12 este mes",
-      icon: Users,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
+        title: "Total Residentes",
+        value: totalResidents,
+        description: "Registrados",
+        icon: Users,
+        color: "text-blue-600",
+        bgColor: "bg-blue-50",
     },
     {
       title: "Unidades",
-      value: "120",
-      description: "96 ocupadas",
+      value: totalUnits,
+      description: `${occupiedUnits} ocupadas`,
       icon: Building,
       color: "text-green-600",
       bgColor: "bg-green-50",
     },
     {
       title: "Pagos Pendientes",
-      value: "$45,250",
-      description: "15 cuentas",
+      value: pendingPayments.length,
+      description: `$${pendingPaymentsAmount.toLocaleString("es-MX")}`,
       icon: CreditCard,
       color: "text-orange-600",
       bgColor: "bg-orange-50",
     },
-    {
-      title: "Mensajes",
-      value: "89",
-      description: "Últimas 24 horas",
-      icon: MessageSquare,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-    },
+    
   ];
+
+  if (
+      isApartmentsLoading ||
+      isPaymentsLoading ||
+      isResidentsLoading
+  ) {
+      return <LoadingSpinner show />
+  }
 
   return (
     <div className="space-y-6">
