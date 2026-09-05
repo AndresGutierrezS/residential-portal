@@ -25,6 +25,11 @@ export const DashboardPage = () => {
       0
   );
 
+  const occupancyPercentage =
+    totalUnits > 0
+        ? Math.round((occupiedUnits / totalUnits) * 100)
+        : 0;
+
   const totalResidents = residents.length;
 
     
@@ -40,21 +45,29 @@ export const DashboardPage = () => {
     {
       title: "Unidades",
       value: totalUnits,
-      description: `${occupiedUnits} ocupadas`,
+      description: `${occupancyPercentage}% ocupación`,
       icon: Building,
       color: "text-green-600",
       bgColor: "bg-green-50",
     },
     {
-      title: "Pagos Pendientes",
-      value: pendingPayments.length,
-      description: `$${pendingPaymentsAmount.toLocaleString("es-MX")}`,
-      icon: CreditCard,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
+        title: "Pagos Pendientes",
+        value: `$${pendingPaymentsAmount.toLocaleString("es-MX")}`,
+        description: `${pendingPayments.length} registros`,
+        icon: CreditCard,
+        color: "text-orange-600",
+        bgColor: "bg-orange-50",
     },
     
   ];
+
+  const recentPayments = [...payments]
+    .sort(
+        (a, b) =>
+            new Date(b.date).getTime() -
+            new Date(a.date).getTime()
+    )
+    .slice(0, 5);
 
   if (
       isApartmentsLoading ||
@@ -72,7 +85,7 @@ export const DashboardPage = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {stats.map((stat) => (
           <Card key={stat.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -101,38 +114,28 @@ export const DashboardPage = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {[
-              {
-                action: "Nuevo pago registrado",
-                details: "Unidad 305 - $850",
-                time: "Hace 2 horas",
-              },
-              {
-                action: "Residente agregado",
-                details: "María González - Unidad 412",
-                time: "Hace 5 horas",
-              },
-              {
-                action: "Mensaje en chat",
-                details: "Anuncio de mantenimiento",
-                time: "Hace 1 día",
-              },
-              {
-                action: "Pago pendiente",
-                details: "Unidad 201 - Recordatorio enviado",
-                time: "Hace 2 días",
-              },
-            ].map((item, index) => (
-              <div
-                key={index}
-                className="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0"
-              >
-                <div className="flex-1">
-                  <p className="font-medium text-gray-900">{item.action}</p>
-                  <p className="text-sm text-gray-600">{item.details}</p>
+            {recentPayments.map((payment) => (
+                <div
+                    key={payment.id}
+                    className="flex items-start gap-4 pb-4 border-b last:border-0 last:pb-0"
+                >
+                    <div className="flex-1">
+                        <p className="font-medium text-gray-900">
+                            {payment.isPaid
+                              ? "Pago realizado"
+                              : "Pago pendiente"}
+                        </p>
+
+                        <p className="text-sm text-gray-600">
+                            {payment.apartment?.code} - $
+                            {Number(payment.amount).toLocaleString("es-MX")}
+                        </p>
+                    </div>
+
+                    <span className="text-sm text-gray-500">
+                        {new Date(payment.date).toLocaleDateString("es-MX")}
+                    </span>
                 </div>
-                <span className="text-sm text-gray-500">{item.time}</span>
-              </div>
             ))}
           </div>
         </CardContent>
