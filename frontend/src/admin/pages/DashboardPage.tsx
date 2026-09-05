@@ -1,4 +1,4 @@
-import { Users, Building, CreditCard, MessageSquare } from "lucide-react";
+import { Users, Building, CreditCard } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { usePayments } from "../payments/hooks/usePayments";
 import { useApartments } from "../apartments/hooks/useApartments";

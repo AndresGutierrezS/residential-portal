@@ -26,7 +26,7 @@ class CarController extends Controller
     {
         $validated = $request->validate([
             'apartment_id' => 'required|exists:apartments,id',
-            'plate' => 'required|string|max:20',
+            'plate' => 'required|string|max:20|unique:cars,plate',
             'brand' => 'required|string|max:50',
             'model' => 'required|string|max:50',
             'color' => 'required|string|max:30',
@@ -61,7 +61,7 @@ class CarController extends Controller
 
         $validated = $request->validate([
             'apartment_id' => 'required|exists:apartments,id',
-            'plate' => 'required|string|max:20',
+            'plate' => 'required|string|max:20|unique:cars,plate,' . $car->id,
             'brand' => 'required|string|max:50',
             'model' => 'required|string|max:50',
             'color' => 'required|string|max:30',

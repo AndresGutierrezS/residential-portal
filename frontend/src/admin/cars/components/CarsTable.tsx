@@ -35,6 +35,7 @@ export const CarsTable = ({ cars, onEdit, onDelete }: Props) => {
       <TableHeader>
         <TableRow>
           <TableHead>Placa</TableHead>
+          <TableHead>Departamento</TableHead>
           <TableHead>Marca</TableHead>
           <TableHead>Modelo</TableHead>
           <TableHead>Color</TableHead>
@@ -48,6 +49,7 @@ export const CarsTable = ({ cars, onEdit, onDelete }: Props) => {
           <TableRow key={car.id}>
 
             <TableCell className="font-medium">{car.plate}</TableCell>
+            <TableCell>{car.apartment?.code}</TableCell>
             <TableCell>{car.brand}</TableCell>
             <TableCell>{car.model}</TableCell>
             <TableCell>{car.color}</TableCell>
