@@ -21,9 +21,9 @@ export const ChatContainer = () => {
                 </CardDescription>
                 </CardHeader>
                 <CardContent className="flex flex-col h-full overflow-hidden min-h-0">
-                    <MessageList 
-                        messages={messages} 
-                        currentUserId={Number(user?.id)}
+                    <MessageList
+                        messages={messages}
+                        currentUserId={Number(user?.person?.id)}
                         isLoading={isLoading}
                     />
                     <MessageInput onSendMessage={sendMessage}/>

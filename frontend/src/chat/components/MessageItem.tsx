@@ -41,13 +41,21 @@ export const MessageItem = ({msg, isCurrentUser}: Props) => {
                 } flex-1 max-w-[70%]`}
             >
                 <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm font-medium text-gray-900">
-                    {msg.sender?.name}
-                </span>
-                <span className="text-xs text-gray-500">
-                    {formatTime(msg.sent_at)}
-                </span>
+                    <span className="text-sm font-medium text-gray-900">
+                        {msg.sender?.name}
+                    </span>
+
+                    {msg.is_admin && (
+                        <span className="text-xs font-medium text-blue-600">
+                            Admin
+                        </span>
+                    )}
+
+                    <span className="text-xs text-gray-500">
+                        {formatTime(msg.sent_at)}
+                    </span>
                 </div>
+                
                 <div
                 className={`px-4 py-2 rounded-lg max-w-full wrap-break-word whitespace-pre-wrap ${
                     isCurrentUser

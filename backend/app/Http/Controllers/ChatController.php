@@ -31,8 +31,10 @@ class ChatController extends Controller
             'message' => 'required|string|max:2000'
         ]);
 
+        $user = Auth::user();
+
         $message = Message::create([
-            'sender_id' => Auth::id() ?? 1,
+            'sender_id' => $user->person_id,
             'receiver_id' => null,
             'apartment_from_id' => null,
             'apartment_to_id' => null,

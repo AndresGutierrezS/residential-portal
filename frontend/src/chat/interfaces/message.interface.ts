@@ -9,6 +9,7 @@ export interface Message {
     updated_at:        Date;
     created_at:        Date;
     id:                number;
+    is_admin:          boolean;
     sender:            Sender;
 }
 

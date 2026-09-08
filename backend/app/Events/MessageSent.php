@@ -5,8 +5,6 @@ namespace App\Events;
 use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -15,12 +13,9 @@ class MessageSent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     */
     public function __construct(public Message $message)
     {
-        $this->message->load('sender');
+        $this->message->load('sender.user');
     }
 
     public function broadcastAs(): string
@@ -28,11 +23,6 @@ class MessageSent implements ShouldBroadcastNow
         return 'message.sent';
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
     public function broadcastOn(): array
     {
         return [
@@ -63,6 +53,8 @@ class MessageSent implements ShouldBroadcastNow
                 'created_at' => $this->message->sender->created_at,
                 'updated_at' => $this->message->sender->updated_at,
             ],
+
+            'is_admin' => (bool) $this->message->sender->user?->is_admin,
         ];
     }
 }
