@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EmailVerificationController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PasswordResetController;
@@ -60,6 +61,8 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::get('/reports/residents', [ReportController::class, 'residents']);
     Route::get('/reports/apartments', [ReportController::class, 'apartments']);
     Route::get('/reports/maintenance', [ReportController::class, 'maintenance']);
+
+    Route::apiResource('events', EventController::class);
 });
 
     

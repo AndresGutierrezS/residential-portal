@@ -7,8 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
-        'event_date',
+        'title',
         'description',
+        'location',
+        'type',
+        'max_attendees',
+        'event_date',
     ];
 
     public function questions()
