@@ -47,11 +47,11 @@ export const EventsPage = () => {
     (event) => new Date(event.event_date) >= new Date()
   ).length;
 
-  const uniqueLocations = new Set(
-    events
-      .map((event) => event.location)
-      .filter(Boolean)
-  ).size;
+  // const uniqueLocations = new Set(
+  //   events
+  //     .map((event) => event.location)
+  //     .filter(Boolean)
+  // ).size;
 
   const totalCapacity = events.reduce(
     (total, event) => total + (event.max_attendees ?? 0),

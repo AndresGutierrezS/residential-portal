@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('chat/messages', [ChatController::class, 'index']);
     Route::post('chat/messages', [ChatController::class, 'store']);
+
+    Route::get('my-payments', [PaymentController::class, 'myPayments']);
     
     Route::get('notifications/{userId}', [NotificationController::class, 'index']);
     Route::post('notifications/{userId}', [NotificationController::class, 'store']);
@@ -69,6 +71,7 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
 Route::middleware('auth:sanctum')->get('/me', function (Request $request) {
     return $request->user()->load(
         'person.apartments',
+        'person.apartmentPeople.apartment',
         'person.apartmentPeople.role'
     );
 });

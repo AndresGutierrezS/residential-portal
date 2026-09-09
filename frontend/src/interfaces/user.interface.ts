@@ -1,38 +1,43 @@
 export interface Role {
-  id: number;
-  role: string;
+    id: number;
+    role: string;
 }
 
 export interface ApartmentPivot {
-  role_id: number;
-  is_resident: boolean;
-  code: string;
-  role?: Role;
+    id: number;
+    person_id: number;
+    apartment_id: number;
+    role_id: number;
+    is_resident: boolean;
+    code: string;
+    apartment?: Apartment;
+    role?: Role;
 }
 
 export interface Apartment {
-  id: number;
-  name: string;
-  code: string;
-  is_overdue: boolean;
-  pivot?: ApartmentPivot;
+    id: number;
+    name: string;
+    code: string;
+    is_overdue: boolean;
+    area: number | null;
+    status: 'occupied' | 'vacant' | 'maintenance';
+    pivot?: ApartmentPivot;
 }
 
 export interface Person {
-  id: number;
-  name: string;
-  last_name: string;
-  second_last_name: string;
-  phone: string;
-  is_active: boolean;
-
-  apartments?: Apartment[];
-  apartment_people?: ApartmentPivot[];
+    id: number;
+    name: string;
+    last_name: string;
+    second_last_name: string;
+    phone: string;
+    is_active: boolean;
+    apartments?: Apartment[];
+    apartment_people?: ApartmentPivot[];
 }
 
 export interface User {
-  id: number;
-  email: string;
-  person: Person;
-  is_admin: boolean;
+    id: number;
+    email: string;
+    person: Person;
+    is_admin: boolean;
 }

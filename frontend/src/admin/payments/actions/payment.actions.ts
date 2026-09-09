@@ -51,3 +51,9 @@ export const markAsPaidAction = async (id: number): Promise<Payment> => {
     const { data } = await portalGateApi.patch<Payment>(`payments/${id}/mark-as-paid`);
     return data;
 }
+
+export const getMyPaymentsAction = async (): Promise<PaymentResponse[]> => {
+    const response = await portalGateApi.get<PaymentResponse[]>("/my-payments");
+
+    return response.data;
+};

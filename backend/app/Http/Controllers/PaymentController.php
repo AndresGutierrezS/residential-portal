@@ -140,4 +140,26 @@ class PaymentController extends Controller
 
         return response()->json($payment->load('maintenance'));
     }
+
+    public function myPayments(Request $request)
+    {
+        $person = $request->user()->person;
+
+        $apartmentIds = $person->apartmentPeople()
+            ->where('is_resident', true)
+            ->pluck('apartment_id');
+
+        $payments = Payment::with([
+            'apartment',
+            'paymentType',
+            'paymentReason',
+            'report',
+            'maintenance',
+        ])
+        ->whereIn('apartment_id', $apartmentIds)
+        ->orderBy('date', 'desc')
+        ->get();
+
+        return response()->json($payments);
+    }
 }
