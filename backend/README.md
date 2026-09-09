@@ -1,59 +1,203 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# PortalGate Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend API for PortalGate, a residential management platform built with Laravel 12.
 
-## About Laravel
+The backend provides the REST API used by the web application and is responsible for authentication, authorization, business logic, data validation and database management.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Technology Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Laravel 12
+* PHP
+* MySQL
+* Laravel Sanctum
+* Laravel Reverb
+* WebSockets
+* Eloquent ORM
+* REST API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Main Features
 
-## Learning Laravel
+The API includes functionality for:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+* Authentication
+* Users and residents
+* Apartments
+* Payments
+* Maintenance records
+* Payment types and reasons
+* Reports
+* Vehicles
+* Community events
+* Real-time chat
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Authentication
 
-## Laravel Sponsors
+Authentication is implemented using Laravel Sanctum.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Authenticated requests use the user's access token to access protected API endpoints.
 
-### Premium Partners
+The backend also distinguishes between administrators and regular residents, allowing different resources and actions depending on the user's role.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+For example, residents can access their own apartment and payment information without having access to the complete administration endpoints.
 
-## Contributing
+## API Structure
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+The API is organized around RESTful resources.
 
-## Code of Conduct
+Main resources include:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```text
+/auth
+/users
+/residents
+/apartments
+/payments
+/payment-types
+/payment-reasons
+/reports
+/cars
+/events
+/my-payments
+```
 
-## Security Vulnerabilities
+The `/my-payments` endpoint was implemented specifically for authenticated residents so that they can retrieve payments associated with their own apartment instead of accessing the complete payment collection.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Database
 
-## License
+The application uses MySQL as its relational database.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Main entities include:
+
+```text
+users
+people
+apartments
+apartment_people
+roles
+payments
+payment_types
+payment_reasons
+maintenance
+reports
+cars
+events
+messages
+```
+
+Relationships are managed through Laravel Eloquent models and migrations.
+
+The `apartment_people` relationship connects people with apartments and also stores information such as their role and resident status.
+
+## Real-Time Chat
+
+The community chat uses Laravel Reverb and WebSockets.
+
+Messages are persisted in the database and broadcast to connected clients so administrators and residents can communicate in real time.
+
+## Validation and Authorization
+
+Request validation is handled through Laravel Form Requests and controller-level authorization rules.
+
+The API also validates relationships and prevents users from accessing information that does not belong to them.
+
+For example, resident payment queries are filtered using the authenticated user's associated apartment.
+
+## Local Installation
+
+Clone the repository:
+
+```bash
+git clone <repository-url>
+cd backend
+```
+
+Install PHP dependencies:
+
+```bash
+composer install
+```
+
+Copy the environment file:
+
+```bash
+cp .env.example .env
+```
+
+Generate the application key:
+
+```bash
+php artisan key:generate
+```
+
+Configure the database connection in `.env`.
+
+Run migrations:
+
+```bash
+php artisan migrate
+```
+
+If seeders are configured for the project, run:
+
+```bash
+php artisan db:seed
+```
+
+Start the Laravel development server:
+
+```bash
+php artisan serve
+```
+
+The API will normally be available at:
+
+```text
+http://127.0.0.1:8000
+```
+
+## Environment Variables
+
+The main environment variables include:
+
+```env
+APP_NAME=PortalGate
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=
+DB_USERNAME=
+DB_PASSWORD=
+```
+
+Do not commit the `.env` file or production credentials to the repository.
+
+## Deployment
+
+The backend is intended to be deployed as a Laravel application on Railway.
+
+The deployment requires configuring the production environment variables, database connection and application key.
+
+Railway supports deploying Laravel applications directly from a GitHub repository and can provide a public domain for the application.
+
+Database migrations should be executed in the production environment before using the application.
+
+## Development
+
+Run the application locally with:
+
+```bash
+php artisan serve
+```
+
+For real-time functionality, Laravel Reverb must also be running according to the project's configured broadcasting setup.
+
+## Status
+
+The backend functionality for the current version of PortalGate has been implemented and tested locally.
+
+The next step is production deployment and connecting the deployed API with the frontend.
