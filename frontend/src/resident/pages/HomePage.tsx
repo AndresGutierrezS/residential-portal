@@ -40,6 +40,8 @@ export function HomePage() {
     parking: "2",
   };
 
+  //console.log(user);
+
   return (
     <div className="space-y-6">
       <WelcomeCard

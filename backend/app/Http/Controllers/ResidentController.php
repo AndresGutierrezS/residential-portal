@@ -160,4 +160,13 @@ class ResidentController extends Controller
         );
     }
 
+    public function available()
+    {
+        $people = Person::with('user')
+            ->whereDoesntHave('apartmentPeople')
+            ->get();
+
+        return response()->json($people);
+    }
+
 }

@@ -40,7 +40,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('notifications/{userId}', [NotificationController::class, 'store']);
     Route::patch('notifications/{userId}/read-all', [NotificationController::class, 'markAllAsRead']);
 
-    
+    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{event}', [EventController::class, 'show']);
 });
     
 Route::middleware('auth:sanctum', 'admin')->group(function () {
@@ -64,7 +65,9 @@ Route::middleware('auth:sanctum', 'admin')->group(function () {
     Route::get('/reports/apartments', [ReportController::class, 'apartments']);
     Route::get('/reports/maintenance', [ReportController::class, 'maintenance']);
 
-    Route::apiResource('events', EventController::class);
+    Route::post('/events', [EventController::class, 'store']);
+    Route::put('/events/{event}', [EventController::class, 'update']);
+    Route::delete('/events/{event}', [EventController::class, 'destroy']);
 });
 
     

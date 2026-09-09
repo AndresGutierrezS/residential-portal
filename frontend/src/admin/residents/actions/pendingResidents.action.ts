@@ -3,6 +3,6 @@ import type { Person } from "../interfaces/person.interface";
 
 
 export const getPendingResidentsAction = async (): Promise<Person[]> => {
-    const { data } = await portalGateApi.get<Person[]>('residents/pending');
+    const { data } = await portalGateApi.get<Person[]>('residents/available');
     return data;
 }

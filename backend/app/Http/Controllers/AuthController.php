@@ -18,8 +18,10 @@ class AuthController extends Controller
         ]);
 
        $user = User::with([
-                'person.apartmentPeople.role'
-            ])->where('email', $request->email)->first();
+            'person.apartments',
+            'person.apartmentPeople.apartment',
+            'person.apartmentPeople.role'
+        ])->where('email', $request->email)->first();
 
         if( !$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
@@ -32,7 +34,7 @@ class AuthController extends Controller
         $token = $user->createToken($device)->plainTextToken;
 
         return response()->json([
-            'user' => $user->load('person'),
+            'user' => $user,
             'token' => $token,
         ]);
     }

@@ -25,7 +25,9 @@ export const LoginPage = () => {
 
     if (success) {
       toast.success("Inicio de sesión exitoso");
-      navigate("/");
+      const isAdmin = useAuthStore.getState().isAdmin();
+
+        navigate(isAdmin ? "/admin" : "/");
     } else {
       toast.error("Por favor ingrese email y contraseña");
     }

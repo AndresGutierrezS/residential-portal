@@ -20,7 +20,6 @@ import { NotAuthenticatedRoute } from "./auth/guards/NotAuthenticatedRoute";
 import { RegisterPage } from "./auth/pages/RegisterPage";
 import { VerifyEmailPage } from "./auth/pages/VerifyEmailPage";
 import { ChangePasswordPage } from "./auth/pages/ChangePasswordPage";
-import path from "node:path";
 import { ForgotPasswordPage } from "./auth/pages/recovery/ForgotPasswordPage";
 import { VerifyCodePage } from "./auth/pages/recovery/VerifyCodePage";
 import { ResetPasswordPage } from "./auth/pages/recovery/ResetPasswordPage";
